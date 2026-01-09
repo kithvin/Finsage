@@ -1,12 +1,7 @@
-const AppError = require('../utils/AppError');
-const config = require('../config');
-
 /**
- * Send detailed error response in development environment.
- * Includes stack trace and full error object.
- * 
- * @param {Error} err - The error object.
- * @param {import('express').Response} res - The Express response object.
+ * @description Send detailed error response in development environment
+ * @param {Error} err - The error object
+ * @param {Object} res - Express response object
  */
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -18,11 +13,9 @@ const sendErrorDev = (err, res) => {
 };
 
 /**
- * Send user-friendly error response in production environment.
- * Hides implementation details and stack traces.
- * 
- * @param {Error} err - The error object.
- * @param {import('express').Response} res - The Express response object.
+ * @description Send sanitized error response in production environment
+ * @param {Error} err - The error object
+ * @param {Object} res - Express response object
  */
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
@@ -34,10 +27,7 @@ const sendErrorProd = (err, res) => {
   } 
   // Programming or other unknown error: don't leak error details
   else {
-    // 1) Log error
     console.error('ERROR 💥', err);
-
-    // 2) Send generic message
     res.status(500).json({
       status: 'error',
       message: 'Something went very wrong!'
@@ -46,23 +36,19 @@ const sendErrorProd = (err, res) => {
 };
 
 /**
- * Global Error Handling Middleware
- * Intercepts all errors passed to next() and sends an appropriate response.
- * 
- * @param {Error} err - The error object.
- * @param {import('express').Request} req - The Express request object.
- * @param {import('express').Response} res - The Express response object.
- * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @description Global Error Handling Middleware - Intercepts all errors and sends appropriate responses
+ * @param {Error} err - The error object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
  */
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
-  if (config.env === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
-  } else {
-    let error = { ...err };
-    error.message = err.message;
-    sendErrorProd(error, res);
+  } else if (process.env.NODE_ENV === 'production') {
+    sendErrorProd(err, res);
   }
 };

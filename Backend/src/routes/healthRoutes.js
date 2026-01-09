@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const healthController = require('../controllers/healthController');
 
+const router = express.Router();
+
 /**
- * Health Routes
- * Defines routes for checking the server status.
- * Base Path: /api/v1/health
+ * @route GET /api/v1/health
+ * @description Check the operational status of the server
+ * @access Public
  */
 router.get('/', healthController.getHealth);
 

@@ -1,23 +1,39 @@
-// This is a placeholder for the User model
-// You can use Mongoose (for MongoDB) or Sequelize (for SQL) here
+const mongoose = require('mongoose');
 
 /**
- * User Model
- * Represents a user in the system.
- * NOTE: This is currently a placeholder class.
+ * @description User Schema - Defines the structure for user records in MongoDB
+ * @property {String} fullname - The full name of the user (required)
+ * @property {String} email - The unique email address of the user (required, unique)
+ * @property {String} password - The hashed password of the user (required, hidden in queries)
+ * @property {Date} createdAt - Automatically generated timestamp for record creation
+ * @property {Date} updatedAt - Automatically generated timestamp for record updates
  */
-class User {
-  /**
-   * Create a new User instance.
-   * @param {string} id - Unique identifier for the user.
-   * @param {string} name - Full name of the user.
-   * @param {string} email - Email address of the user.
-   */
-  constructor(id, name, email) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
+const userSchema = new mongoose.Schema({
+  fullname: {
+    type: String,
+    required: [true, 'Please provide your full name'],
+    trim: true
+  },
+  email: {
+    type: String,
+    required: [true, 'Please provide your email'],
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide a password'],
+    minlength: 8,
+    select: false
   }
-}
+}, {
+  timestamps: true
+});
+
+/**
+ * @description User Model - Mongoose model for interacting with the 'users' collection
+ */
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
