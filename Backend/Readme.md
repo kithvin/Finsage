@@ -1,70 +1,32 @@
 # Finsage Backend
 
-## Description
-The Finsage Backend is the server-side application for the Finsage project. It is built using Node.js and Express.js to handle API requests and manage data for the Finsage application.
+This is the REST API backend for Finsage.
 
-## Features
-- RESTful API endpoints for various functionalities.
-- Environment-based configuration using `.env`.
-- Modular structure for scalability and maintainability.
+## Setup
 
-## Prerequisites
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
-
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd Backend
-   ```
-3. Install dependencies:
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-## Environment Variables
-Create a `.env` file in the root directory and configure the following variables:
-```
-PORT=5000
-DB_CONNECTION_STRING=your_database_connection_string_here
-JWT_SECRET=your_jwt_secret_here
-```
+2. Create a `.env` file (if not exists) with the following content:
+   ```
+   PORT=3000
+   NODE_ENV=development
+   ```
 
-## Scripts
-- Start the server:
-  ```bash
-  npm start
-  ```
-- Start the server in development mode:
+## Running the server
+
+- Development mode:
   ```bash
   npm run dev
   ```
 
-## Project Structure
-```
-Backend/
-├── src/
-│   ├── Server.js
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   └── utils/
-├── .env
-├── package.json
-└── Readme.md
-```
+- Production mode:
+  ```bash
+  npm start
+  ```
 
-## Dependencies
-- express: ^4.18.2
+## API Endpoints
 
-## Dev Dependencies
-- nodemon: ^2.0.22
-
-## License
-This project is licensed under the ISC License.
+- Health Check: `GET /api/v1/health`
