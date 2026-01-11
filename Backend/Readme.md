@@ -27,6 +27,15 @@ This is the REST API backend for Finsage.
   npm start
   ```
 
-## API Endpoints
+## API Documentation
 
-- Health Check: `GET /api/v1/health`
+Detailed documentation for all API endpoints can be found in [documentation/API_DOCUMENTATION.md](./documentation/API_DOCUMENTATION.md).
+
+### Core Endpoints:
+- **Health Check**: `GET /api/v1/health`
+- **Users**: `/api/v1/users`
+- **Incomes**: `/api/v1/incomes`
+- **Assets**: `/api/v1/assets`
+- **Liabilities**: `/api/v1/liabilities`
+- **Cards**: `/api/v1/cards`
+

@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const config = require('./config');
-const routes = require('./routes');
+const config = require('./config/config');
+const routes = require('./routes/routes');
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./middleware/errorMiddleware');
 
@@ -56,7 +56,7 @@ app.use(globalErrorHandler);
 /**
  * @description Database Connection and Server Startup
  */
-mongoose.connect(config.mongodbUri)
+mongoose.connect(config.mongodbUri, { dbName: config.mongodbDbName })
   .then(() => {
     console.log('Connected to MongoDB Atlas successfully');
     

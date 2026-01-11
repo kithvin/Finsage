@@ -9,7 +9,7 @@ const cardRoutes = require('./cardRoutes');
 
 /**
  * @description Main Router - Aggregates all module-specific routes into a single router
- * @module routes/index
+ * @module routes/routes
  */
 
 /**
