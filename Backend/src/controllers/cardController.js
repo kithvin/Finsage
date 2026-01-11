@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
  * @description Create a new credit card record in the database
  * @route POST /api/v1/cards
  * @access Public
- * @param {Object} req - Express request object containing card details in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing card details in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.createCard = catchAsync(async (req, res, next) => {
   const newCard = await Card.create(req.body);
@@ -25,9 +25,9 @@ exports.createCard = catchAsync(async (req, res, next) => {
  * @description Retrieve all credit card records from the database
  * @route GET /api/v1/cards
  * @access Public
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAllCards = catchAsync(async (req, res, next) => {
   const cards = await Card.find();
@@ -45,9 +45,9 @@ exports.getAllCards = catchAsync(async (req, res, next) => {
  * @description Retrieve a specific credit card record by its unique ID
  * @route GET /api/v1/cards/:id
  * @access Public
- * @param {Object} req - Express request object containing card ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing card ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getCard = catchAsync(async (req, res, next) => {
   const card = await Card.findById(req.params.id);
@@ -68,9 +68,9 @@ exports.getCard = catchAsync(async (req, res, next) => {
  * @description Update an existing credit card record by its unique ID
  * @route PATCH /api/v1/cards/:id
  * @access Public
- * @param {Object} req - Express request object containing card ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing card ID in params and update data in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.updateCard = catchAsync(async (req, res, next) => {
   const card = await Card.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,9 +94,9 @@ exports.updateCard = catchAsync(async (req, res, next) => {
  * @description Permanently delete a credit card record by its unique ID
  * @route DELETE /api/v1/cards/:id
  * @access Public
- * @param {Object} req - Express request object containing card ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing card ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.deleteCard = catchAsync(async (req, res, next) => {
   const card = await Card.findByIdAndDelete(req.params.id);

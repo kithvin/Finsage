@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
  * @description Create a new user record in the database
  * @route POST /api/v1/users
  * @access Public
- * @param {Object} req - Express request object containing user details in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing user details in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.createUser = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
@@ -25,9 +25,9 @@ exports.createUser = catchAsync(async (req, res, next) => {
  * @description Retrieve all user records from the database
  * @route GET /api/v1/users
  * @access Public
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
@@ -45,9 +45,9 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
  * @description Retrieve a specific user record by its unique ID
  * @route GET /api/v1/users/:id
  * @access Public
- * @param {Object} req - Express request object containing user ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing user ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id);
@@ -68,9 +68,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
  * @description Update an existing user record by its unique ID
  * @route PATCH /api/v1/users/:id
  * @access Public
- * @param {Object} req - Express request object containing user ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing user ID in params and update data in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.updateUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,9 +94,9 @@ exports.updateUser = catchAsync(async (req, res, next) => {
  * @description Permanently delete a user record by its unique ID
  * @route DELETE /api/v1/users/:id
  * @access Public
- * @param {Object} req - Express request object containing user ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing user ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id);

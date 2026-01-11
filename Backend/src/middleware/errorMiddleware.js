@@ -1,7 +1,8 @@
 /**
  * @description Send detailed error response in development environment
- * @param {Error} err - The error object
- * @param {Object} res - Express response object
+ * @param {Error} err - The error object containing status code and message
+ * @param {import('express').Response} res - Express response object
+ * @returns {void}
  */
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -14,8 +15,9 @@ const sendErrorDev = (err, res) => {
 
 /**
  * @description Send sanitized error response in production environment
- * @param {Error} err - The error object
- * @param {Object} res - Express response object
+ * @param {Error} err - The error object containing status code and message
+ * @param {import('express').Response} res - Express response object
+ * @returns {void}
  */
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
@@ -38,9 +40,10 @@ const sendErrorProd = (err, res) => {
 /**
  * @description Global Error Handling Middleware - Intercepts all errors and sends appropriate responses
  * @param {Error} err - The error object
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
+ * @returns {void}
  */
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;

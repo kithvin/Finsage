@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
  * @description Create a new income record in the database
  * @route POST /api/v1/incomes
  * @access Public
- * @param {Object} req - Express request object containing income details in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing income details in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.createIncome = catchAsync(async (req, res, next) => {
   const newIncome = await Income.create(req.body);
@@ -25,9 +25,9 @@ exports.createIncome = catchAsync(async (req, res, next) => {
  * @description Retrieve all income records from the database
  * @route GET /api/v1/incomes
  * @access Public
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAllIncomes = catchAsync(async (req, res, next) => {
   const incomes = await Income.find();
@@ -45,9 +45,9 @@ exports.getAllIncomes = catchAsync(async (req, res, next) => {
  * @description Retrieve a specific income record by its unique ID
  * @route GET /api/v1/incomes/:id
  * @access Public
- * @param {Object} req - Express request object containing income ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing income ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getIncome = catchAsync(async (req, res, next) => {
   const income = await Income.findById(req.params.id);
@@ -68,9 +68,9 @@ exports.getIncome = catchAsync(async (req, res, next) => {
  * @description Update an existing income record by its unique ID
  * @route PATCH /api/v1/incomes/:id
  * @access Public
- * @param {Object} req - Express request object containing income ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing income ID in params and update data in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.updateIncome = catchAsync(async (req, res, next) => {
   const income = await Income.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,9 +94,9 @@ exports.updateIncome = catchAsync(async (req, res, next) => {
  * @description Permanently delete an income record by its unique ID
  * @route DELETE /api/v1/incomes/:id
  * @access Public
- * @param {Object} req - Express request object containing income ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing income ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.deleteIncome = catchAsync(async (req, res, next) => {
   const income = await Income.findByIdAndDelete(req.params.id);

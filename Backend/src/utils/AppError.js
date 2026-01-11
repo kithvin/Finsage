@@ -6,7 +6,7 @@
 class AppError extends Error {
   /**
    * @description Create a new AppError instance
-   * @param {string} message - The error message
+   * @param {string} message - The human-readable error message
    * @param {number} statusCode - The HTTP status code (e.g., 404, 400, 500)
    */
   constructor(message, statusCode) {

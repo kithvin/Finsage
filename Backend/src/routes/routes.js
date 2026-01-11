@@ -8,7 +8,9 @@ const liabilityRoutes = require('./liabilityRoutes');
 const cardRoutes = require('./cardRoutes');
 
 /**
- * @description Main Router - Aggregates all module-specific routes into a single router
+ * @description Main Router - Aggregates all module-specific routes into a single router.
+ * This file serves as the central hub for all API endpoints, delegating requests to
+ * specialized route files for users, incomes, assets, liabilities, and cards.
  * @module routes/routes
  */
 

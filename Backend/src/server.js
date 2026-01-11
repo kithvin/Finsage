@@ -33,7 +33,14 @@ app.use(express.urlencoded({ extended: true }));
  * @description Route Configuration
  */
 
-// Welcome route
+/**
+ * @description Root Route - Provides a welcome message for the API
+ * @route GET /
+ * @access Public
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {void} Sends a JSON welcome message
+ */
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Finsage API' });
 });
@@ -45,7 +52,12 @@ app.use('/api/v1', routes);
  * @description Error Handling Configuration
  */
 
-// Catch-all for undefined routes
+/**
+ * @description Catch-all Middleware - Handles requests to undefined routes by throwing a 404 error
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @param {import('express').NextFunction} next - The Express next middleware function
+ */
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
@@ -54,13 +66,16 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 /**
- * @description Database Connection and Server Startup
+ * @description Database Connection and Server Startup Logic
+ * Connects to MongoDB Atlas using the provided URI and starts the Express server.
  */
 mongoose.connect(config.mongodbUri, { dbName: config.mongodbDbName })
   .then(() => {
     console.log('Connected to MongoDB Atlas successfully');
     
-    // Start listening for requests
+    /**
+     * @description Start Server - Begins listening for incoming HTTP requests
+     */
     app.listen(config.port, () => {
       console.log(`Server is running on port ${config.port} in ${config.env} mode`);
     });

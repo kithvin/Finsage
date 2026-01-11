@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
  * @description Create a new liability record in the database
  * @route POST /api/v1/liabilities
  * @access Public
- * @param {Object} req - Express request object containing liability details in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing liability details in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.createLiability = catchAsync(async (req, res, next) => {
   const newLiability = await Liability.create(req.body);
@@ -25,9 +25,9 @@ exports.createLiability = catchAsync(async (req, res, next) => {
  * @description Retrieve all liability records from the database
  * @route GET /api/v1/liabilities
  * @access Public
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAllLiabilities = catchAsync(async (req, res, next) => {
   const liabilities = await Liability.find();
@@ -45,9 +45,9 @@ exports.getAllLiabilities = catchAsync(async (req, res, next) => {
  * @description Retrieve a specific liability record by its unique ID
  * @route GET /api/v1/liabilities/:id
  * @access Public
- * @param {Object} req - Express request object containing liability ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing liability ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getLiability = catchAsync(async (req, res, next) => {
   const liability = await Liability.findById(req.params.id);
@@ -68,9 +68,9 @@ exports.getLiability = catchAsync(async (req, res, next) => {
  * @description Update an existing liability record by its unique ID
  * @route PATCH /api/v1/liabilities/:id
  * @access Public
- * @param {Object} req - Express request object containing liability ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing liability ID in params and update data in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.updateLiability = catchAsync(async (req, res, next) => {
   const liability = await Liability.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,9 +94,9 @@ exports.updateLiability = catchAsync(async (req, res, next) => {
  * @description Permanently delete a liability record by its unique ID
  * @route DELETE /api/v1/liabilities/:id
  * @access Public
- * @param {Object} req - Express request object containing liability ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing liability ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.deleteLiability = catchAsync(async (req, res, next) => {
   const liability = await Liability.findByIdAndDelete(req.params.id);

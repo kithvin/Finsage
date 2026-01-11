@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
  * @description Create a new asset record in the database
  * @route POST /api/v1/assets
  * @access Public
- * @param {Object} req - Express request object containing asset details in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing asset details in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.createAsset = catchAsync(async (req, res, next) => {
   const newAsset = await Asset.create(req.body);
@@ -25,9 +25,9 @@ exports.createAsset = catchAsync(async (req, res, next) => {
  * @description Retrieve all asset records from the database
  * @route GET /api/v1/assets
  * @access Public
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAllAssets = catchAsync(async (req, res, next) => {
   const assets = await Asset.find();
@@ -45,9 +45,9 @@ exports.getAllAssets = catchAsync(async (req, res, next) => {
  * @description Retrieve a specific asset record by its unique ID
  * @route GET /api/v1/assets/:id
  * @access Public
- * @param {Object} req - Express request object containing asset ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing asset ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.getAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findById(req.params.id);
@@ -68,9 +68,9 @@ exports.getAsset = catchAsync(async (req, res, next) => {
  * @description Update an existing asset record by its unique ID
  * @route PATCH /api/v1/assets/:id
  * @access Public
- * @param {Object} req - Express request object containing asset ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing asset ID in params and update data in body
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.updateAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,9 +94,9 @@ exports.updateAsset = catchAsync(async (req, res, next) => {
  * @description Permanently delete an asset record by its unique ID
  * @route DELETE /api/v1/assets/:id
  * @access Public
- * @param {Object} req - Express request object containing asset ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {import('express').Request} req - Express request object containing asset ID in params
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
  */
 exports.deleteAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findByIdAndDelete(req.params.id);
