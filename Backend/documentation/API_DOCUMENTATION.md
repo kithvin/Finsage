@@ -196,3 +196,21 @@ Manage credit card accounts.
 
 ### DELETE `/cards/:id`
 - **Description**: Delete a card record.
+
+---
+
+## 7. Recommendations
+Get AI-powered financial recommendations.
+
+### GET `/recommendations`
+- **Description**: Generates personalized financial advice using Gemini AI based on the user's aggregated financial data (Incomes, Assets, Liabilities, Cards).
+- **Access**: Public
+- **Response**:
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "recommendations": "Based on your financial profile, here are some recommendations: ..."
+    }
+  }
+  ```
