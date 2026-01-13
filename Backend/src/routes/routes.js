@@ -6,6 +6,7 @@ const incomeRoutes = require('./incomeRoutes');
 const assetRoutes = require('./assetRoutes');
 const liabilityRoutes = require('./liabilityRoutes');
 const cardRoutes = require('./cardRoutes');
+const recommendationRoutes = require('./recommendationRoutes');
 
 /**
  * @description Main Router - Aggregates all module-specific routes into a single router.
@@ -49,5 +50,11 @@ router.use('/liabilities', liabilityRoutes);
  * @description Routes for credit card management (CRUD)
  */
 router.use('/cards', cardRoutes);
+
+/**
+ * @route /api/v1/recommendations
+ * @description Routes for AI-powered financial recommendations
+ */
+router.use('/recommendations', recommendationRoutes);
 
 module.exports = router;
