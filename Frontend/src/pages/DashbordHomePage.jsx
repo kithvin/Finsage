@@ -75,7 +75,7 @@ export default function DashbordHomePage() {
   const [collapsed, setCollapsed] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[#ebe4e1] flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <DashboardNavbar userName="kithvin" />
 
       {/* Body: sidebar + main */}

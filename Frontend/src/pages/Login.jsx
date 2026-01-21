@@ -23,24 +23,39 @@ export default function Login() {
     setError("");
     setLoading(true);
 
-    const success = Boolean(email && password);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/user/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // ✅ REQUIRED for cookies
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-    if (success) {
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/"); // change to "/dashboard" if you create it
-      }, 600);
-    } else {
-      setError("Invalid email or password");
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.message || "Invalid email or password");
+        return;
+      }
+
+      // ✅ JWT stored in httpOnly cookie
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/dashboard"); // ✅ go to dashboard
+    } catch (err) {
+      setError("Backend not reachable. Is server running?");
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex bg-[#FFFFFF]">
-      {/* LEFT SIDE (hidden on mobile) */}
+      {/* LEFT SIDE */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#201e1e] p-12 flex-col justify-between">
-        {/* Brand */}
         <div
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
@@ -51,18 +66,15 @@ export default function Login() {
           <span className="text-3xl font-bold text-white">FinSage</span>
         </div>
 
-        {/* CENTER CONTENT (UP & CENTER like your image) */}
         <div className="flex flex-col items-center text-center mt-16">
           <h1 className="text-5xl font-bold text-white leading-tight max-w-2xl">
             Manage Your Wealth with Intelligence
           </h1>
-
           <p className="mt-6 text-lg text-[#BFC0C0] max-w-xl">
             Track your finances and get AI recommendations.
           </p>
         </div>
 
-        {/* ICONS (semi-large, bottom like your image) */}
         <div className="flex items-center justify-center gap-10 mb-8">
           <IconItem icon={<Wallet className="h-6 w-6" />} label="Wallet" />
           <IconItem icon={<Sparkles className="h-6 w-6" />} label="AI" />
@@ -78,7 +90,6 @@ export default function Login() {
       {/* RIGHT SIDE */}
       <div className="flex-1 flex items-center justify-center px-4 py-10 bg-[#ecebe8]">
         <div className="w-full max-w-md">
-          {/* Mobile brand */}
           <div className="lg:hidden flex justify-center items-center gap-3 mb-8">
             <div className="w-11 h-11 rounded-2xl bg-[#EF8354] text-white flex items-center justify-center font-bold text-xl">
               F
@@ -86,7 +97,6 @@ export default function Login() {
             <span className="text-2xl font-bold text-[#040303]">FinSage</span>
           </div>
 
-          {/* Card */}
           <div className="border border-[#BFC0C0]/40 rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-[#040303]">Welcome back</h2>
             <p className="text-sm text-[#BFC0C0] mt-2">
@@ -100,7 +110,6 @@ export default function Login() {
             )}
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-              {/* Email */}
               <div>
                 <label className="text-sm font-medium text-[#040303]">
                   Email
@@ -118,22 +127,10 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Password */}
               <div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#040303]">
-                    Password
-                  </label>
-
-                  {/* <button
-                    type="button"
-                    onClick={() => alert("Forgot password flow (later)")}
-                    className="text-xs text-[#EF8354] hover:underline"
-                  >
-                    Forgot password?
-                  </button> */}
-                </div>
-
+                <label className="text-sm font-medium text-[#040303]">
+                  Password
+                </label>
                 <div className="relative mt-2">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#BFC0C0]" />
                   <input
@@ -147,7 +144,6 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -157,7 +153,6 @@ export default function Login() {
                 {!loading && <ArrowRight className="h-4 w-4" />}
               </button>
 
-              {/* Link */}
               <p className="text-center text-sm text-[#BFC0C0]">
                 Don't have an account?{" "}
                 <button
@@ -176,7 +171,7 @@ export default function Login() {
   );
 }
 
-/*  semi-large icon item */
+/* Icon Item */
 function IconItem({ icon, label }) {
   return (
     <div className="flex flex-col items-center gap-3">

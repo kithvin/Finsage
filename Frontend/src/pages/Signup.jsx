@@ -11,28 +11,55 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+    // frontend validation (same as backend expectation)
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters");
       setLoading(false);
       return;
     }
 
-    setTimeout(() => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/user/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // ✅ REQUIRED for cookies
+          body: JSON.stringify({
+            fullname: name, // ✅ backend expects "fullname"
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.message || "Signup failed");
+        return;
+      }
+
+      // ✅ JWT stored in httpOnly cookie
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/dashboard"); // ✅ redirect after signup
+    } catch (err) {
+      setError("Backend not reachable. Is server running?");
+    } finally {
       setLoading(false);
-      navigate("/");
-    }, 800);
+    }
   };
 
   return (
     <div className="min-h-screen flex bg-[#f7f7f7]">
       {/* LEFT SIDE */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#201e1e] p-12 flex-col justify-between">
-        {/* Brand */}
         <div
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
@@ -43,20 +70,16 @@ export default function Signup() {
           <span className="text-3xl font-bold text-white">FinSage</span>
         </div>
 
-        {/* CENTER CONTENT */}
         <div className="flex flex-col items-center text-center">
-          {/* Title + subtitle */}
           <div className="mt-12">
             <h1 className="text-5xl font-bold text-white leading-tight">
               Start Your Financial Journey Today
             </h1>
-
             <p className="mt-8 text-lg text-[#BFC0C0] max-w-xl mx-auto">
               Join thousands managing wealth smarter with AI insights.
             </p>
           </div>
 
-          {/* FEATURES (FIXED CENTER ALIGNMENT) */}
           <div className="mt-12 w-full max-w-xl space-y-6 pt-4 mx-auto">
             <Feature
               title="Track Everything"
@@ -81,7 +104,6 @@ export default function Signup() {
       {/* RIGHT SIDE */}
       <div className="flex-1 flex items-center justify-center px-4 py-10 bg-[#ecebe8]">
         <div className="w-full max-w-md">
-          {/* Mobile brand */}
           <div className="lg:hidden flex justify-center items-center gap-3 mb-8">
             <div className="w-11 h-11 rounded-2xl bg-[#EF8354] text-white flex items-center justify-center font-bold text-xl">
               F
@@ -89,7 +111,6 @@ export default function Signup() {
             <span className="text-2xl font-bold text-[#040303]">FinSage</span>
           </div>
 
-          {/* Card */}
           <div className="border border-[#BFC0C0]/40 rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-[#040303]">
               Create an account
@@ -174,7 +195,14 @@ function Feature({ title, desc }) {
   );
 }
 
-function InputField({ label, icon, placeholder, value, onChange, type = "text" }) {
+function InputField({
+  label,
+  icon,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+}) {
   return (
     <div>
       <label className="text-sm font-medium text-[#040303]">{label}</label>

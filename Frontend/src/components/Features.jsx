@@ -25,7 +25,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="bg-[#ecebe8] py-16 sm:py-20 md:py-24 px-4 sm:px-6">
+    <section className="bg-white py-16 sm:py-20 md:py-24 px-4 sm:px-6">
       <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#040303] mb-10 sm:mb-14">
        Everything You Need to Manage Your Wealth
       </h2>
@@ -34,7 +34,7 @@ export default function Features() {
         {features.map((f) => (
           <div
             key={f.title}
-            className="group bg-[#ecebe8]
+            className="group bg-white
               border border-solid border-gray-300
               rounded-2xl p-6 sm:p-8
               transition-all duration-300

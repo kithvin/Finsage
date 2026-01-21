@@ -6,7 +6,7 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-[#ecebe8] pt-24 sm:pt-28 md:pt-32 pb-24 sm:pb-32 md:pb-36 text-center px-4 sm:px-6">
+    <section className="bg-white pt-24 sm:pt-28 md:pt-32 pb-24 sm:pb-32 md:pb-36 text-center px-4 sm:px-6">
       {/* Heading */}
       <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-[#040303] leading-tight tracking-tight">
         AI Powered Wealth <br className="hidden sm:block" />

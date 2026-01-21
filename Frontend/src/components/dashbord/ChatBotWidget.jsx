@@ -4,14 +4,18 @@ import { MessageCircle, X, Send, Sparkles } from "lucide-react";
 export default function ChatBotWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      text: "Hi! 👋 I’m FinSage Assistant. Ask me about your income, assets, liabilities, or recommendations.",
+      text: "👋 Hi! I’m FinSage Assistant. Ask me about your income, assets, liabilities, or recommendations.",
     },
   ]);
 
   const listRef = useRef(null);
+
+  const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   useEffect(() => {
     if (!open) return;
@@ -20,25 +24,55 @@ export default function ChatBotWidget() {
     });
   }, [open, messages]);
 
-  const canSend = useMemo(() => input.trim().length > 0, [input]);
+  const canSend = useMemo(() => input.trim().length > 0 && !loading, [input, loading]);
 
   const sendMessage = async () => {
     if (!canSend) return;
 
     const userText = input.trim();
     setInput("");
+    setLoading(true);
+
+    // Add user message
     setMessages((prev) => [...prev, { role: "user", text: userText }]);
 
-    // mock bot reply (replace later with API call)
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: "Got it ✅ I can help with financial insights. (Next step: connect me to your backend/LLM API.)",
-        },
-      ]);
-    }, 500);
+    // Add typing message
+    const typingId = crypto.randomUUID();
+    setMessages((prev) => [...prev, { id: typingId, role: "bot", text: "Typing..." }]);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/chat/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Server error");
+      }
+
+      // Your backend response format: { success: true, data: { response: "..." } }
+      const botText = data?.data?.response || "No response received.";
+
+      // Replace typing message with real response
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === typingId ? { ...m, text: botText } : m
+        )
+      );
+    } catch (err) {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === typingId
+            ? { ...m, text: `Server not reachable. ${err.message}` }
+            : m
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onKeyDown = (e) => {
@@ -50,7 +84,7 @@ export default function ChatBotWidget() {
 
   return (
     <>
-      {/* Floating button (premium) */}
+      {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-2xl bg-[#EF8354] text-white shadow-lg
@@ -65,7 +99,7 @@ export default function ChatBotWidget() {
       {/* Panel */}
       {open && (
         <div className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[92vw] overflow-hidden rounded-3xl border border-[#BFC0C0]/60 bg-white shadow-2xl">
-          {/* Header (premium) */}
+          {/* Header */}
           <div className="px-4 py-3 border-b border-[#BFC0C0]/40 bg-gradient-to-r from-[#EF8354]/15 via-white to-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -100,7 +134,7 @@ export default function ChatBotWidget() {
             </div>
           </div>
 
-          {/* Messages area */}
+          {/* Messages */}
           <div
             ref={listRef}
             className="h-[380px] overflow-auto px-4 py-4 bg-gradient-to-b from-white to-[#BFC0C0]/10"
@@ -109,7 +143,7 @@ export default function ChatBotWidget() {
               const isUser = m.role === "user";
               return (
                 <div
-                  key={idx}
+                  key={m.id || idx}
                   className={`mb-3 flex ${isUser ? "justify-end" : "justify-start"}`}
                 >
                   <div
@@ -159,6 +193,12 @@ export default function ChatBotWidget() {
                 <Send className="h-4 w-4" />
               </button>
             </div>
+
+            {loading && (
+              <p className="mt-2 text-[11px] text-[#040303]/50">
+                FinSage Assistant is thinking...
+              </p>
+            )}
           </div>
         </div>
       )}

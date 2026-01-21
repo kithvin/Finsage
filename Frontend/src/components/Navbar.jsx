@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
   const navigate = useNavigate();
   return (
-    <nav className="w-full bg-[#ecebe8] border-b border-gray-300">
+    <nav className="w-full bg-white border-b border-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
@@ -42,3 +42,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
