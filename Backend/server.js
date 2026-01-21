@@ -3,39 +3,44 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./configs/db.js";
+
 import userRouter from "./routes/userRouter.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import incomeRoutes from "./routes/incomeRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Define allowed origins for CORS
-
-const allowedOrigins = ["http://localhost:3000"];
-
-// Connect to MongoDB database
 await connectDB();
 
-// Middleware Configuration
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
 
-// Root route to test if API is working
 app.get("/", (req, res) => {
   res.send("API is Working 🚀");
 });
 
-app.use("/api/user", userRouter); // All user-related routes start with /api/user
+app.use("/api/user", userRouter);
 app.use("/api/chat", chatRoutes);
+app.use("/api/incomes", incomeRoutes);
 
+// Global error handler
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
 
-// Start the server and listen on the defined port
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
