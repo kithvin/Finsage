@@ -9,6 +9,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
 import assetRoutes from "./routes/assetRoutes.js";
 import liabilityRoutes from "./routes/liabilityRoutes.js";
+import cardRoutes from "./routes/cardRoutes.js";;
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -33,6 +34,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/incomes", incomeRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/liabilities", liabilityRoutes);
+app.use("/api/cards", cardRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {
