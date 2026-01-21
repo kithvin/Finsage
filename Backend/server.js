@@ -7,6 +7,7 @@ import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRouter.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/incomes", incomeRoutes);
+app.use("/api/assets", assetRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

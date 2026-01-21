@@ -53,7 +53,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FFFFFF]">
+    <div className="min-h-screen flex bg-white">
       {/* LEFT SIDE */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#201e1e] p-12 flex-col justify-between">
         <div
@@ -99,7 +99,7 @@ export default function Login() {
 
           <div className="border border-[#BFC0C0]/40 rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-[#040303]">Welcome back</h2>
-            <p className="text-sm text-[#BFC0C0] mt-2">
+            <p className="text-sm text-[#a5a8a8] mt-2">
               Sign in to your account to continue
             </p>
 
@@ -153,7 +153,7 @@ export default function Login() {
                 {!loading && <ArrowRight className="h-4 w-4" />}
               </button>
 
-              <p className="text-center text-sm text-[#BFC0C0]">
+              <p className="text-center text-sm text-[#a5a8a8]">
                 Don't have an account?{" "}
                 <button
                   type="button"

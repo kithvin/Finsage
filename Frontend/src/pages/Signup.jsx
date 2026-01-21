@@ -57,7 +57,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#f7f7f7]">
+    <div className="min-h-screen flex bg-white">
       {/* LEFT SIDE */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#201e1e] p-12 flex-col justify-between">
         <div
@@ -115,7 +115,7 @@ export default function Signup() {
             <h2 className="text-2xl font-bold text-[#040303]">
               Create an account
             </h2>
-            <p className="text-sm text-[#BFC0C0] mt-2">
+            <p className="text-sm text-[#a5a8a8] mt-2">
               Get started with FinSage today
             </p>
 
@@ -161,7 +161,7 @@ export default function Signup() {
                 {!loading && <ArrowRight size={16} />}
               </button>
 
-              <p className="text-center text-sm text-[#BFC0C0]">
+              <p className="text-center text-sm text-[#a5a8a8]">
                 Already have an account?{" "}
                 <button
                   type="button"

@@ -1,122 +1,102 @@
-// src/pages/IncomePage.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// src/pages/AssetsPage.jsx
+import React, { useEffect, useState } from "react"; //added useEffect
+import axios from "axios"; // added axios
 
 import DashboardNavbar from "../components/dashbord/DashboardNavbar";
 import DashbordSidebar from "../components/dashbord/DashbordSidebar";
 import DashboardFooter from "../components/dashbord/DashboardFooter";
 import ChatBotWidget from "../components/dashbord/ChatBotWidget";
 
-export default function IncomePage() {
+export default function AssetsPage() {
   const [collapsed, setCollapsed] = useState(true);
 
-  // simple list (later: replace with backend fetch)
-  const [incomes, setIncomes] = useState([]);
-
-  // simple modal state
+  const [assets, setAssets] = useState([]);
   const [open, setOpen] = useState(false);
 
-  // simple form object (easy to send to backend)
-  const [form, setForm] = useState({
-    source: "",
-    amount: "",
-    frequency: "monthly",
-  });
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [value, setValue] = useState("");
 
+  //API base url from .env
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+  // Fetch assets from backend when page loads
   useEffect(() => {
-    async function fetchIncomes() {
+    async function fetchAssets() {
       try {
-        const res = await axios.get(`${API_BASE}/api/incomes`, {
+        const res = await axios.get(`${API_BASE}/api/assets`, {
           withCredentials: true,
         });
 
-        const list = res.data?.data?.incomes || [];
+        const list = res.data?.data?.assets || [];
 
-        setIncomes(
-          list.map((i) => ({
-            id: i._id,
-            source: i.incomeSource,
-            amount: i.amount,
-            frequency: String(i.frequency || "Monthly").toLowerCase(),
+        // map backend fields -> frontend fields (UI stays same)
+        setAssets(
+          list.map((a) => ({
+            id: a._id,
+            name: a.assetName,
+            type: a.assetType,
+            value: a.currentValue,
           }))
         );
       } catch (err) {
-        console.error("Fetch incomes error:", err);
+        console.error("Fetch assets error:", err);
       }
     }
 
-    fetchIncomes();
+    fetchAssets();
   }, [API_BASE]);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
-  }
+  // simplest total
+  const totalAssets = assets.reduce((sum, a) => sum + (a.value || 0), 0);
 
-  function calcAnnual(item) {
-    const amt = Number(item.amount || 0);
-
-    if (item.frequency === "monthly") return amt * 12;
-    if (item.frequency === "yearly") return amt;
-    return amt; // one-time
-  }
-
-  function calcTotalAnnual(list) {
-    let total = 0;
-    for (let i = 0; i < list.length; i++) {
-      total += calcAnnual(list[i]);
-    }
-    return total;
-  }
-
-  const totalAnnualIncome = calcTotalAnnual(incomes);
-
-  async function addIncome(e) {
+  // Add asset -> POST to backend
+  async function addAsset(e) {
     e.preventDefault();
 
     try {
       const payload = {
-        incomeSource: form.source.trim(),
-        amount: Number(form.amount || 0),
-        frequency:
-          form.frequency.charAt(0).toUpperCase() + form.frequency.slice(1),
+        assetName: name.trim(),
+        assetType: type.trim(),
+        currentValue: Number(value || 0),
       };
 
-      const res = await axios.post(`${API_BASE}/api/incomes`, payload, {
+      const res = await axios.post(`${API_BASE}/api/assets`, payload, {
         withCredentials: true,
       });
 
-      const saved = res.data?.data?.income;
+      const saved = res.data?.data?.asset;
 
-      setIncomes((p) => [
+      setAssets((prev) => [
         {
           id: saved._id,
-          source: saved.incomeSource,
-          amount: saved.amount,
-          frequency: String(saved.frequency || "Monthly").toLowerCase(),
+          name: saved.assetName,
+          type: saved.assetType,
+          value: saved.currentValue,
         },
-        ...p,
+        ...prev,
       ]);
 
-      // reset form
-      setForm({ source: "", amount: "", frequency: "monthly" });
+      // reset
+      setName("");
+      setType("");
+      setValue("");
       setOpen(false);
     } catch (err) {
-      console.error("Create income error:", err);
+      console.error("Create asset error:", err);
     }
   }
 
-  async function deleteIncome(id) {
+  // Delete asset -> DELETE from backend
+  async function deleteAsset(id) {
     try {
-      await axios.delete(`${API_BASE}/api/incomes/${id}`, {
+      await axios.delete(`${API_BASE}/api/assets/${id}`, {
         withCredentials: true,
       });
 
-      setIncomes((p) => p.filter((x) => x.id !== id));
+      setAssets((prev) => prev.filter((a) => a.id !== id));
     } catch (err) {
-      console.error("Delete income error:", err);
+      console.error("Delete asset error:", err);
     }
   }
 
@@ -135,9 +115,9 @@ export default function IncomePage() {
             {/* Header */}
             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
               <div>
-                <h1 className="text-3xl font-bold text-[#040303]">Income</h1>
+                <h1 className="text-3xl font-bold text-[#040303]">Assets</h1>
                 <p className="text-sm text-[#BFC0C0]">
-                  Track and manage your income sources
+                  Track and manage your assets
                 </p>
               </div>
 
@@ -145,70 +125,62 @@ export default function IncomePage() {
                 onClick={() => setOpen(true)}
                 className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition"
               >
-                Add Income
+                Add Asset
               </button>
             </div>
 
-            {/* Total Annual Income */}
+            {/* Total Assets */}
             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-              <h3 className="font-semibold text-[#040303]">
-                Total Annual Income
-              </h3>
+              <h3 className="font-semibold text-[#040303]">Total Assets</h3>
               <p className="text-xs text-[#BFC0C0] mt-1">
-                Estimated yearly income from all sources
+                Combined value of all your assets
               </p>
 
               <div className="text-4xl font-bold mt-6 text-[#EF8354]">
-                ${totalAnnualIncome.toLocaleString()}
+                ${totalAssets.toLocaleString()}
               </div>
             </div>
 
-            {/* Income Sources */}
+            {/* Assets table */}
             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-              <h3 className="font-semibold text-[#040303]">Income Sources</h3>
+              <h3 className="font-semibold text-[#040303]">Your Assets</h3>
               <p className="text-xs text-[#BFC0C0] mt-1">
-                All your tracked income sources
+                All your tracked assets
               </p>
 
               <div className="mt-5">
-                {incomes.length === 0 ? (
+                {assets.length === 0 ? (
                   <div className="h-24 rounded-md bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#BFC0C0]">
-                    No income sources added yet
+                    No assets added yet
                   </div>
                 ) : (
                   <div className="overflow-auto">
                     <table className="w-full text-sm">
                       <thead className="text-left text-[#BFC0C0]">
                         <tr className="border-b border-[#BFC0C0]/60">
-                          <th className="py-3">Source</th>
-                          <th className="py-3">Amount</th>
-                          <th className="py-3">Frequency</th>
-                          <th className="py-3">Annual</th>
+                          <th className="py-3">Name</th>
+                          <th className="py-3">Type</th>
+                          <th className="py-3">Value</th>
                           <th className="py-3 text-right">Action</th>
                         </tr>
                       </thead>
 
                       <tbody>
-                        {incomes.map((it) => (
+                        {assets.map((a) => (
                           <tr
-                            key={it.id}
+                            key={a.id}
                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
                           >
                             <td className="py-3 font-medium text-[#040303]">
-                              {it.source}
+                              {a.name}
                             </td>
+                            <td className="py-3 text-[#040303]">{a.type}</td>
                             <td className="py-3 text-[#040303]">
-                              ${Number(it.amount).toLocaleString()}
-                            </td>
-                            <td className="py-3 text-[#040303] capitalize">
-                              {it.frequency}
-                            </td>
-                            <td className="py-3 text-[#040303]">
-                              ${calcAnnual(it).toLocaleString()}
+                              ${Number(a.value).toLocaleString()}
                             </td>
                             <td className="py-3 text-right">
                               <button
-                                onClick={() => deleteIncome(it.id)}
+                                onClick={() => deleteAsset(a.id)}
                                 className="mt-2 text-xs px-6 py-3 rounded-md bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
                               >
                                 Delete
@@ -236,87 +208,70 @@ export default function IncomePage() {
                     <div className="flex items-start justify-between px-6 pt-5">
                       <div>
                         <h3 className="text-lg font-semibold text-[#040303]">
-                          Add New Income
+                          Add New Asset
                         </h3>
                         <p className="text-sm text-[#BFC0C0] mt-1">
-                          Add a new income source to track your earnings
+                          Add a new asset to track your wealth
                         </p>
                       </div>
 
                       <button
                         onClick={() => setOpen(false)}
                         className="text-[#BFC0C0] hover:text-[#040303] px-2"
-                        aria-label="Close"
                       >
                         ✕
                       </button>
                     </div>
 
                     <form
-                      onSubmit={addIncome}
+                      onSubmit={addAsset}
                       className="px-6 pb-6 pt-4 space-y-4"
                     >
                       <div>
                         <label className="text-sm font-medium text-[#040303]">
-                          Income Source
+                          Asset Name
                         </label>
                         <input
-                          name="source"
-                          value={form.source}
-                          onChange={handleChange}
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
-                          placeholder="e.g., Salary, Freelance, Investment"
+                          placeholder="e.g., Savings Account"
                           required
                         />
                       </div>
 
                       <div>
                         <label className="text-sm font-medium text-[#040303]">
-                          Amount ($)
+                          Asset Type
                         </label>
                         <input
-                          name="amount"
-                          value={form.amount}
-                          onChange={handleChange}
+                          value={type}
+                          onChange={(e) => setType(e.target.value)}
+                          className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+                          placeholder="e.g., Cash, Property, Investment"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-sm font-medium text-[#040303]">
+                          Current Value ($)
+                        </label>
+                        <input
+                          value={value}
+                          onChange={(e) => setValue(e.target.value)}
                           type="number"
-                          step="0.01"
                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
-                          placeholder="0.00"
+                          placeholder="0"
                           required
                         />
-                      </div>
-
-                      <div>
-                        <label className="text-sm font-medium text-[#040303]">
-                          Frequency
-                        </label>
-
-                        <div className="relative mt-2">
-                          {/* Custom arrow – slightly left */}
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
-                            ▼
-                          </span>
-
-                          <select
-                            name="frequency"
-                            value={form.frequency}
-                            onChange={handleChange}
-                            className="appearance-none w-full border border-[#BFC0C0] rounded-md
-                            pl-2 pr-3 py-2 outline-none
-                            focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
-                          >
-                            <option value="monthly">Monthly</option>
-                            <option value="yearly">Yearly</option>
-                            <option value="one-time">One-time</option>
-                          </select>
-                        </div>
                       </div>
 
                       <button
                         type="submit"
                         className="w-full bg-[#EF8354] text-white py-2.5 rounded-md font-medium hover:opacity-90 transition"
                       >
-                        Add Income
+                        Add Asset
                       </button>
                     </form>
                   </div>
