@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import DashbordHomePage from "./pages/DashbordHomePage";
 import IncomePage from "./pages/IncomePage";
 import AssetsPage from "./pages/AssetsPage";
+import LiabilitiesPage from "./pages/LiabilitiesPage";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/dashboard" element={<DashbordHomePage />} />
       <Route path="/income" element={<IncomePage />} />
       <Route path="/assets" element={<AssetsPage />} />
+      <Route path="/liabilities" element={<LiabilitiesPage />} />
     </Routes>
   );
 }
