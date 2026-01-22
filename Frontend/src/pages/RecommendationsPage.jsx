@@ -1299,7 +1299,7 @@ export default function RecommendationsPage() {
                     </span>
                   </div>
 
-                  <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#040303]">
+                  <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[#040303]">
                     Recommendations
                   </h1>
                   <p className="mt-2 text-sm text-[#040303]/70 max-w-2xl">

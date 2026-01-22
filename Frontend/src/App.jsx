@@ -9,6 +9,7 @@ import AssetsPage from "./pages/AssetsPage";
 import LiabilitiesPage from "./pages/LiabilitiesPage";
 import CreditCardsPage from "./pages/CreditCardsPage";
 import RecommendationsPage from "./pages/RecommendationsPage";
+import AnalysisPage from "./pages/AnalysisPage";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
       <Route path="/liabilities" element={<LiabilitiesPage />} />
       <Route path="/credit-cards" element={<CreditCardsPage/>}/>
       <Route path="/recommendations" element={<RecommendationsPage />} />
+      <Route path="/AnalysisPage" element={<AnalysisPage />} />
     </Routes>
   );
 }
