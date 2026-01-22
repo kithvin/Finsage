@@ -30,7 +30,7 @@ export default function DashboardFooter() {
 
   return (
     <footer className="bg-[#ebe4e1] mt-10 border-t border-gray-200">
-      <div className="max-w-[1600px] mx-auto px-6">
+      <div className="max-w-[1700px] mx-auto px-6">
         {/* Top section */}
         <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-[#dfdbdb] text-gray-600">
           

@@ -58,7 +58,7 @@ export default function DashboardNavbar() {
   };
 
   return (
-    <header className="bg-[#FFFFFF] border-b border-[#BFC0C0]/60">
+    <header className="bg-white border-b border-[#BFC0C0]/60">
       <div className="max-w-[1700px] mx-auto px-6">
         <div className="h-14 flex items-center justify-between">
           

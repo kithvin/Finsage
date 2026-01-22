@@ -23,7 +23,7 @@ const navItems = [
 export default function DashbordSidebar({ collapsed, onToggle }) {
   return (
     <aside
-      className={`h-screen sticky top-0 bg-[#FFFFFF] border-r border-[#BFC0C0]/50 transition-all duration-200
+      className={`h-screen sticky top-0  bg-[#FFFFFF] border-r border-[#BFC0C0]/50 transition-all duration-200
       ${collapsed ? "w-[72px]" : "w-[260px]"}`}
     >
       {/* Top brand + collapse button */}

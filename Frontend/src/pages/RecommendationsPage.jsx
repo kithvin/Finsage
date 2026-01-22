@@ -1,50 +1,1281 @@
-import React, { useState } from "react";
+// import React, { useEffect, useMemo, useState } from "react";
+// import axios from "axios";
+
+// import DashboardNavbar from "../components/dashbord/DashboardNavbar";
+// import DashbordSidebar from "../components/dashbord/DashbordSidebar";
+// import DashboardFooter from "../components/dashbord/DashboardFooter";
+// import ChatBotWidget from "../components/dashbord/ChatBotWidget";
+
+// const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+// function splitToBullets(text) {
+//   if (!text) return [];
+
+//   const rawLines = String(text)
+//     .split("\n")
+//     .map((l) => l.trim())
+//     .filter(Boolean);
+
+//   const cleaned = rawLines.map((l) => l.replace(/^[-*•\d+.)\s]+/, "").trim());
+
+//   if (cleaned.length <= 1) {
+//     return String(text)
+//       .split(". ")
+//       .map((s) => s.trim())
+//       .filter((s) => s.length > 8)
+//       .slice(0, 10);
+//   }
+
+//   return cleaned.slice(0, 12);
+// }
+
+// function makePriority(line) {
+//   const l = line.toLowerCase();
+//   if (
+//     l.includes("urgent") ||
+//     l.includes("high") ||
+//     l.includes("immediately") ||
+//     l.includes("asap") ||
+//     l.includes("debt") ||
+//     l.includes("overdue")
+//   )
+//     return "high";
+//   if (l.includes("consider") || l.includes("improve") || l.includes("reduce"))
+//     return "medium";
+//   return "low";
+// }
+
+// function clsx(...arr) {
+//   return arr.filter(Boolean).join(" ");
+// }
+
+// export default function RecommendationsPage() {
+//   const [collapsed, setCollapsed] = useState(true);
+
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const [recommendations, setRecommendations] = useState([]);
+
+//   // UI-only states (no backend changes)
+//   const [query, setQuery] = useState("");
+//   const [statusFilter, setStatusFilter] = useState("all");
+//   const [priorityFilter, setPriorityFilter] = useState("all");
+
+//   useEffect(() => {
+//     const fetchRecommendations = async () => {
+//       setLoading(true);
+//       setError("");
+
+//       try {
+//         const res = await axios.get(`${API_BASE}/api/recommendations`, {
+//           withCredentials: true,
+//         });
+
+//         const aiText = res?.data?.data?.recommendations;
+//         const bullets = splitToBullets(aiText);
+
+//         const list = bullets.map((line, idx) => ({
+//           id: idx + 1,
+//           title: line.length > 70 ? `${line.slice(0, 70)}...` : line,
+//           description: line,
+//           priority: makePriority(line),
+//           status: "pending",
+//         }));
+
+//         setRecommendations(list);
+//       } catch (e) {
+//         const msg =
+//           e?.response?.data?.message ||
+//           e?.message ||
+//           "Failed to load recommendations.";
+//         setError(msg);
+//         setRecommendations([]);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchRecommendations();
+//   }, []);
+
+//   const pendingCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "pending").length,
+//     [recommendations]
+//   );
+//   const progressCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "In progress").length,
+//     [recommendations]
+//   );
+//   const doneCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "completed").length,
+//     [recommendations]
+//   );
+
+//   const completionPct = useMemo(() => {
+//     const total = recommendations.length || 0;
+//     if (!total) return 0;
+//     return Math.round((doneCount / total) * 100);
+//   }, [recommendations.length, doneCount]);
+
+//   function updateStatus(id, newStatus) {
+//     setRecommendations((prev) =>
+//       prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
+//     );
+//   }
+
+//   function priorityBadge(p) {
+//     if (p === "high") return "bg-[#EF8354] text-white";
+//     if (p === "medium") return "bg-[#BFC0C0] text-[#040303]";
+//     return "bg-white border border-[#BFC0C0] text-[#040303]";
+//   }
+
+//   function statusBadge(s) {
+//     if (s === "completed") return "bg-[#040303] text-white";
+//     if (s === "in-progress") return "bg-[#EF8354] text-white";
+//     return "bg-white border border-[#BFC0C0] text-[#040303]";
+//   }
+
+//   function leftAccent(priority) {
+//     if (priority === "high") return "bg-[#EF8354]";
+//     if (priority === "medium") return "bg-[#BFC0C0]";
+//     return "bg-[#ecebe8]";
+//   }
+
+//   const filtered = useMemo(() => {
+//     const q = query.trim().toLowerCase();
+
+//     return recommendations
+//       .filter((r) => {
+//         if (statusFilter === "all") return true;
+//         return r.status === statusFilter;
+//       })
+//       .filter((r) => {
+//         if (priorityFilter === "all") return true;
+//         return r.priority === priorityFilter;
+//       })
+//       .filter((r) => {
+//         if (!q) return true;
+//         return (
+//           r.title.toLowerCase().includes(q) ||
+//           r.description.toLowerCase().includes(q)
+//         );
+//       });
+//   }, [recommendations, query, statusFilter, priorityFilter]);
+
+//   const tabs = [
+//     { key: "all", label: "All", count: recommendations.length },
+//     { key: "pending", label: "Pending", count: pendingCount },
+//     { key: "in-progress", label: "In Progress", count: progressCount },
+//     { key: "completed", label: "Completed", count: doneCount },
+//   ];
+
+//   return (
+//     <div className="min-h-screen bg-white flex flex-col">
+//       <DashboardNavbar/>
+
+//       <div className="flex flex-1 min-h-0">
+//         <DashbordSidebar
+//           collapsed={collapsed}
+//           onToggle={() => setCollapsed((prev) => !prev)}
+//         />
+
+//         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
+//           <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
+//             {/* HERO HEADER */}
+//             <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+//                 <div>
+//                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#BFC0C0] bg-white">
+//                     <span className="w-2 h-2 rounded-full bg-[#EF8354]" />
+//                     <span className="text-xs font-semibold text-[#040303]">
+//                       AI Insights
+//                     </span>
+//                     <span className="text-xs text-[#BFC0C0]">
+//                       • Personalized
+//                     </span>
+//                   </div>
+
+//                   <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#040303]">
+//                     Recommendations
+//                   </h1>
+//                   <p className="mt-2 text-sm text-[#040303]/70 max-w-2xl">
+//                     Actionable steps based on your income, assets, liabilities,
+//                     and cards track progress and improve your financial health.
+//                   </p>
+
+//                   {/* Progress bar */}
+//                   <div className="mt-5">
+//                     <div className="flex items-center justify-between text-xs text-[#040303]/70">
+//                       <span>Overall progress</span>
+//                       <span className="font-semibold text-[#040303]">
+//                         {completionPct}%
+//                       </span>
+//                     </div>
+//                     <div className="mt-2 h-2 rounded-full bg-[#ecebe8] overflow-hidden border border-[#BFC0C0]/70">
+//                       <div
+//                         className="h-full bg-[#EF8354]"
+//                         style={{ width: `${completionPct}%` }}
+//                       />
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+//                   <button
+//                     onClick={() => window.location.reload()}
+//                     className="border border-[#BFC0C0] rounded-xl px-4 py-2 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+//                   >
+//                     Refresh
+//                   </button>
+
+//                   <div className="border border-[#BFC0C0] rounded-xl px-4 py-2 bg-white">
+//                     <p className="text-xs text-[#040303]/60">Total items</p>
+//                     <p className="text-xl font-extrabold text-[#040303] text-center">
+//                       {recommendations.length}
+//                     </p>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               {/* Search + Priority Filter */}
+//               <div className="mt-6 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+//                 <div className="flex-1">
+//                   <input
+//                     value={query}
+//                     onChange={(e) => setQuery(e.target.value)}
+//                     placeholder="Search recommendations..."
+//                     className="w-full border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                   />
+//                 </div>
+
+//                 <div className="flex gap-3">
+//                   {/* PRIORITY DROPDOWN */}
+//                   <div className="relative">
+//                     <select
+//                       value={priorityFilter}
+//                       onChange={(e) => setPriorityFilter(e.target.value)}
+//                       className="appearance-none border border-[#BFC0C0] rounded-xl px-4 py-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+//                     >
+//                       <option value="all">All priorities</option>
+//                       <option value="high">High priority</option>
+//                       <option value="medium">Medium priority</option>
+//                       <option value="low">Low priority</option>
+//                     </select>
+
+//                     <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+//                       ▼
+//                     </span>
+//                   </div>
+
+//                   <button
+//                     onClick={() => {
+//                       setQuery("");
+//                       setStatusFilter("all");
+//                       setPriorityFilter("all");
+//                     }}
+//                     className="border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+//                   >
+//                     Reset
+//                   </button>
+//                 </div>
+//               </div>
+
+//               {/* Tabs */}
+//               <div className="mt-5 flex flex-wrap gap-2">
+//                 {tabs.map((t) => {
+//                   const active = statusFilter === t.key;
+//                   return (
+//                     <button
+//                       key={t.key}
+//                       onClick={() => setStatusFilter(t.key)}
+//                       className={clsx(
+//                         "px-4 py-2 rounded-full text-sm font-semibold border transition",
+//                         active
+//                           ? "bg-[#EF8354] text-white border-[#EF8354]"
+//                           : "bg-white text-[#040303] border-[#BFC0C0] hover:bg-[#ecebe8]"
+//                       )}
+//                     >
+//                       {t.label}
+//                       <span
+//                         className={clsx(
+//                           "ml-2 text-xs px-2 py-0.5 rounded-full",
+//                           active
+//                             ? "bg-white/15 text-white"
+//                             : "bg-[#ecebe8] text-[#040303]"
+//                         )}
+//                       >
+//                         {t.count}
+//                       </span>
+//                     </button>
+//                   );
+//                 })}
+//               </div>
+//             </div>
+
+//             {/* Loading / Error */}
+//             {loading && (
+//               <div className="grid gap-4">
+//                 {[1, 2, 3].map((k) => (
+//                   <div
+//                     key={k}
+//                     className="border border-[#BFC0C0] rounded-2xl p-6 bg-white"
+//                   >
+//                     <div className="h-4 w-2/3 bg-[#ecebe8] rounded mb-3" />
+//                     <div className="h-3 w-full bg-[#ecebe8] rounded mb-2" />
+//                     <div className="h-3 w-5/6 bg-[#ecebe8] rounded" />
+//                     <div className="mt-5 flex gap-2">
+//                       <div className="h-7 w-24 bg-[#ecebe8] rounded-full" />
+//                       <div className="h-7 w-28 bg-[#ecebe8] rounded-full" />
+//                     </div>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+
+//             {!loading && error && (
+//               <div className="bg-white border border-red-200 rounded-2xl p-6">
+//                 <p className="text-red-600 font-extrabold">Error</p>
+//                 <p className="text-sm text-red-500 mt-1">{error}</p>
+
+//                 <div className="mt-4 rounded-xl border border-[#BFC0C0] bg-[#ecebe8] p-4">
+//                   <p className="text-sm text-[#040303]/80">
+//                     Check backend:{" "}
+//                     <span className="font-semibold">http://localhost:5000</span>{" "}
+//                     and route{" "}
+//                     <span className="font-semibold">/api/recommendations</span>.
+//                   </p>
+//                 </div>
+//               </div>
+//             )}
+
+//             {/* Summary cards */}
+//             {!loading && !error && (
+//               <div className="grid gap-4 md:grid-cols-3">
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <div className="flex items-start justify-between">
+//                     <div>
+//                       <h3 className="font-bold text-[#040303]">Pending</h3>
+//                       <p className="text-xs text-[#040303]/60 mt-1">
+//                         Need your attention
+//                       </p>
+//                     </div>
+//                     <div className="w-10 h-10 rounded-xl bg-[#ecebe8] border border-[#BFC0C0] flex items-center justify-center">
+//                       <span className="w-2.5 h-2.5 rounded-full bg-[#EF8354]" />
+//                     </div>
+//                   </div>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {pendingCount}
+//                   </div>
+//                 </div>
+
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <div className="flex items-start justify-between">
+//                     <div>
+//                       <h3 className="font-bold text-[#040303]">In Progress</h3>
+//                       <p className="text-xs text-[#040303]/60 mt-1">
+//                         You’re working on these
+//                       </p>
+//                     </div>
+//                     <div className="w-10 h-10 rounded-xl bg-[#ecebe8] border border-[#BFC0C0] flex items-center justify-center">
+//                       <span className="w-2.5 h-2.5 rounded-full bg-[#EF8354]" />
+//                     </div>
+//                   </div>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {progressCount}
+//                   </div>
+//                 </div>
+
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <div className="flex items-start justify-between">
+//                     <div>
+//                       <h3 className="font-bold text-[#040303]">Completed</h3>
+//                       <p className="text-xs text-[#040303]/60 mt-1">
+//                         Done & tracked
+//                       </p>
+//                     </div>
+//                     <div className="w-10 h-10 rounded-xl bg-[#ecebe8] border border-[#BFC0C0] flex items-center justify-center">
+//                       <span className="w-2.5 h-2.5 rounded-full bg-[#EF8354]" />
+//                     </div>
+//                   </div>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {doneCount}
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+
+//             {/* List */}
+//             {!loading && !error && (
+//               <div className="space-y-4">
+//                 {filtered.length === 0 ? (
+//                   <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//                     <div className="py-10 text-center">
+//                       <div className="mx-auto w-14 h-14 rounded-2xl bg-[#ecebe8] border border-[#BFC0C0] flex items-center justify-center">
+//                         <span className="w-3 h-3 rounded-full bg-[#EF8354]" />
+//                       </div>
+//                       <p className="mt-4 font-extrabold text-[#040303]">
+//                         No recommendations found
+//                       </p>
+//                       <p className="mt-2 text-sm text-[#040303]/60 max-w-xl mx-auto">
+//                         Try changing filters or add more financial data
+//                         (income/assets/liabilities/cards) to generate better
+//                         insights.
+//                       </p>
+//                     </div>
+//                   </div>
+//                 ) : (
+//                   filtered.map((r) => (
+//                     <div
+//                       // key={r.id}
+//                       className="group border border-[#BFC0C0] rounded-2xl bg-white overflow-hidden hover:shadow-sm transition"
+//                     >
+//                       <div className="flex">
+//                         <div className={clsx("w-2", leftAccent(r.priority))} />
+
+//                         <div className="flex-1 p-6">
+//                           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+//                             <div className="flex-1 min-w-0">
+//                               <div className="flex flex-wrap items-center gap-2">
+//                                 <h2 className="text-xl font-bold text-[#040303]">
+//                                   {r.title}
+//                                 </h2>
+
+//                                 <span
+//                                   className={clsx(
+//                                     "text-xs px-3 py-2 rounded-full font-semibold",
+//                                     priorityBadge(r.priority)
+//                                   )}
+//                                 >
+//                                   {r.priority} priority
+//                                 </span>
+
+//                                 <span
+//                                   className={clsx(
+//                                     "text-xs px-3 py-2 rounded-full font-semibold",
+//                                     statusBadge(r.status)
+//                                   )}
+//                                 >
+//                                   {r.status}
+//                                 </span>
+//                               </div>
+
+//                               <p className="text-sm text-[#040303]/70 mt-3 leading-relaxed">
+//                                 {r.description}
+//                               </p>
+//                             </div>
+
+//                             {/* DROPDOWN */}
+//                             <div className="flex items-center gap-2">
+//                               <span className="text-xs text-[#040303]/50 hidden sm:inline">
+//                                 Update status
+//                               </span>
+
+//                               <div className="relative">
+//                                 <select
+//                                   value={r.status}
+//                                   onChange={(e) =>
+//                                     updateStatus(r.id, e.target.value)
+//                                   }
+//                                   className="appearance-none border border-[#BFC0C0] rounded-xl px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+//                                 >
+//                                   <option value="pending">Pending</option>
+//                                   <option value="In progress">
+//                                     In progress
+//                                   </option>
+//                                   <option value="completed">Completed</option>
+//                                 </select>
+
+//                                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+//                                   ▼
+//                                 </span>
+//                               </div>
+//                             </div>
+//                           </div>
+
+//                           <div className="mt-5 pt-4 border-t border-[#BFC0C0]/60 flex items-center justify-between text-xs text-[#040303]/60">
+//                             <span>
+//                               Tip: do high priority first to improve faster.
+//                             </span>
+//                             <span className="group-hover:text-[#040303] transition">
+//                               FinSage AI
+//                             </span>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   ))
+//                 )}
+//               </div>
+//             )}
+
+//             {/* Info card */}
+//             {!loading && !error && (
+//               <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//                 <h3 className="font-bold text-[#040303]">
+//                   How Recommendations Work
+//                 </h3>
+//                 <p className="text-sm text-[#040303]/70 mt-2">
+//                   FinSage analyzes your financial data and generates simple,
+//                   practical actions to improve your financial health.
+//                 </p>
+
+//                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">
+//                       Track progress
+//                     </p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       Update the status for each recommendation.
+//                     </p>
+//                   </div>
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">
+//                       Focus smart
+//                     </p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       Prioritize high urgency items first.
+//                     </p>
+//                   </div>
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">
+//                       Keep updating data
+//                     </p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       New inputs lead to better recommendations.
+//                     </p>
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//         </main>
+
+//         <ChatBotWidget />
+//       </div>
+
+//       <DashboardFooter />
+//     </div>
+//   );
+// }
+
+// import React, { useEffect, useMemo, useState } from "react";
+// import axios from "axios";
+
+// import DashboardNavbar from "../components/dashbord/DashboardNavbar";
+// import DashbordSidebar from "../components/dashbord/DashbordSidebar";
+// import DashboardFooter from "../components/dashbord/DashboardFooter";
+// import ChatBotWidget from "../components/dashbord/ChatBotWidget";
+
+// const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+// function splitToBullets(text) {
+//   if (!text) return [];
+
+//   const rawLines = String(text)
+//     .split("\n")
+//     .map((l) => l.trim())
+//     .filter(Boolean);
+
+//   const cleaned = rawLines.map((l) => l.replace(/^[-*•\d+.)\s]+/, "").trim());
+
+//   if (cleaned.length <= 1) {
+//     return String(text)
+//       .split(". ")
+//       .map((s) => s.trim())
+//       .filter((s) => s.length > 8)
+//       .slice(0, 10);
+//   }
+
+//   return cleaned.slice(0, 12);
+// }
+
+// function makePriority(line) {
+//   const l = line.toLowerCase();
+//   if (
+//     l.includes("urgent") ||
+//     l.includes("high") ||
+//     l.includes("immediately") ||
+//     l.includes("asap") ||
+//     l.includes("debt") ||
+//     l.includes("overdue")
+//   )
+//     return "high";
+//   if (l.includes("consider") || l.includes("improve") || l.includes("reduce"))
+//     return "medium";
+//   return "low";
+// }
+
+// function clsx(...arr) {
+//   return arr.filter(Boolean).join(" ");
+// }
+
+// export default function RecommendationsPage() {
+//   const [collapsed, setCollapsed] = useState(true);
+
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const [recommendations, setRecommendations] = useState([]);
+
+//   const [query, setQuery] = useState("");
+//   const [statusFilter, setStatusFilter] = useState("all");
+//   const [priorityFilter, setPriorityFilter] = useState("all");
+
+//   useEffect(() => {
+//     const fetchRecommendations = async () => {
+//       setLoading(true);
+//       setError("");
+
+//       try {
+//         const res = await axios.get(`${API_BASE}/api/recommendations`, {
+//           withCredentials: true,
+//         });
+
+//         const aiText = res?.data?.data?.recommendations;
+//         const bullets = splitToBullets(aiText);
+
+//         const list = bullets.map((line, idx) => ({
+//           id: idx + 1,
+//           title: line.length > 70 ? `${line.slice(0, 70)}...` : line,
+//           description: line,
+//           priority: makePriority(line),
+//           status: "pending", // ✅ consistent
+//         }));
+
+//         setRecommendations(list);
+//       } catch (e) {
+//         const msg =
+//           e?.response?.data?.message ||
+//           e?.message ||
+//           "Failed to load recommendations.";
+//         setError(msg);
+//         setRecommendations([]);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchRecommendations();
+//   }, []);
+
+//   const pendingCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "pending").length,
+//     [recommendations]
+//   );
+
+//   const progressCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "in-progress").length,
+//     [recommendations]
+//   );
+
+//   const doneCount = useMemo(
+//     () => recommendations.filter((r) => r.status === "completed").length,
+//     [recommendations]
+//   );
+
+//   const completionPct = useMemo(() => {
+//     const total = recommendations.length || 0;
+//     if (!total) return 0;
+//     return Math.round((doneCount / total) * 100);
+//   }, [recommendations.length, doneCount]);
+
+//   function updateStatus(id, newStatus) {
+//     setRecommendations((prev) =>
+//       prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
+//     );
+//   }
+
+//   function priorityBadge(p) {
+//     if (p === "high") return "bg-[#EF8354] text-white";
+//     if (p === "medium") return "bg-[#BFC0C0] text-[#040303]";
+//     return "bg-white border border-[#BFC0C0] text-[#040303]";
+//   }
+
+//   function statusBadge(s) {
+//     if (s === "completed") return "bg-[#040303] text-white";
+//     if (s === "in-progress") return "bg-[#EF8354] text-white";
+//     return "bg-white border border-[#BFC0C0] text-[#040303]";
+//   }
+
+//   function leftAccent(priority) {
+//     if (priority === "high") return "bg-[#EF8354]";
+//     if (priority === "medium") return "bg-[#BFC0C0]";
+//     return "bg-[#ecebe8]";
+//   }
+
+//   const filtered = useMemo(() => {
+//     const q = query.trim().toLowerCase();
+
+//     return recommendations
+//       .filter((r) => (statusFilter === "all" ? true : r.status === statusFilter))
+//       .filter((r) =>
+//         priorityFilter === "all" ? true : r.priority === priorityFilter
+//       )
+//       .filter((r) => {
+//         if (!q) return true;
+//         return (
+//           r.title.toLowerCase().includes(q) ||
+//           r.description.toLowerCase().includes(q)
+//         );
+//       });
+//   }, [recommendations, query, statusFilter, priorityFilter]);
+
+//   const tabs = [
+//     { key: "all", label: "All", count: recommendations.length },
+//     { key: "pending", label: "Pending", count: pendingCount },
+//     { key: "in-progress", label: "In Progress", count: progressCount },
+//     { key: "completed", label: "Completed", count: doneCount },
+//   ];
+
+//   return (
+//     <div className="min-h-screen bg-[#ebe4e1] flex flex-col">
+//       <DashboardNavbar />
+
+//       <div className="flex flex-1 min-h-0">
+//         <DashbordSidebar
+//           collapsed={collapsed}
+//           onToggle={() => setCollapsed((prev) => !prev)}
+//         />
+
+//         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
+//           <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
+//             {/* HERO HEADER */}
+//             <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+//                 <div>
+//                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#BFC0C0] bg-white">
+//                     <span className="w-2 h-2 rounded-full bg-[#EF8354]" />
+//                     <span className="text-xs font-semibold text-[#040303]">
+//                       AI Insights
+//                     </span>
+//                     <span className="text-xs text-[#BFC0C0]">• Personalized</span>
+//                   </div>
+
+//                   <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#040303]">
+//                     Recommendations
+//                   </h1>
+//                   <p className="mt-2 text-sm text-[#040303]/70 max-w-2xl">
+//                     Actionable steps based on your income, assets, liabilities,
+//                     and cards — track progress and improve your financial health.
+//                   </p>
+
+//                   {/* Progress bar */}
+//                   <div className="mt-5">
+//                     <div className="flex items-center justify-between text-xs text-[#040303]/70">
+//                       <span>Overall progress</span>
+//                       <span className="font-semibold text-[#040303]">
+//                         {completionPct}%
+//                       </span>
+//                     </div>
+//                     <div className="mt-2 h-2 rounded-full bg-[#ecebe8] overflow-hidden border border-[#BFC0C0]/70">
+//                       <div
+//                         className="h-full bg-[#EF8354]"
+//                         style={{ width: `${completionPct}%` }}
+//                       />
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+//                   <button
+//                     onClick={() => window.location.reload()}
+//                     className="border border-[#BFC0C0] rounded-xl px-4 py-2 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+//                   >
+//                     Refresh
+//                   </button>
+
+//                   <div className="border border-[#BFC0C0] rounded-xl px-4 py-2 bg-white">
+//                     <p className="text-xs text-[#040303]/60">Total items</p>
+//                     <p className="text-xl font-extrabold text-[#040303] text-center">
+//                       {recommendations.length}
+//                     </p>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               {/* Search + Priority Filter */}
+//               <div className="mt-6 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+//                 <div className="flex-1">
+//                   <input
+//                     value={query}
+//                     onChange={(e) => setQuery(e.target.value)}
+//                     placeholder="Search recommendations..."
+//                     className="w-full border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                   />
+//                 </div>
+
+//                 <div className="flex gap-3">
+//                   <div className="relative">
+//                     <select
+//                       value={priorityFilter}
+//                       onChange={(e) => setPriorityFilter(e.target.value)}
+//                       className="appearance-none border border-[#BFC0C0] rounded-xl px-4 py-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+//                     >
+//                       <option value="all">All priorities</option>
+//                       <option value="high">High priority</option>
+//                       <option value="medium">Medium priority</option>
+//                       <option value="low">Low priority</option>
+//                     </select>
+
+//                     <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+//                       ▼
+//                     </span>
+//                   </div>
+
+//                   <button
+//                     onClick={() => {
+//                       setQuery("");
+//                       setStatusFilter("all");
+//                       setPriorityFilter("all");
+//                     }}
+//                     className="border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+//                   >
+//                     Reset
+//                   </button>
+//                 </div>
+//               </div>
+
+//               {/* Tabs */}
+//               <div className="mt-5 flex flex-wrap gap-2">
+//                 {tabs.map((t) => {
+//                   const active = statusFilter === t.key;
+//                   return (
+//                     <button
+//                       key={t.key}
+//                       onClick={() => setStatusFilter(t.key)}
+//                       className={clsx(
+//                         "px-4 py-2 rounded-full text-sm font-semibold border transition",
+//                         active
+//                           ? "bg-[#EF8354] text-white border-[#EF8354]"
+//                           : "bg-white text-[#040303] border-[#BFC0C0] hover:bg-[#ecebe8]"
+//                       )}
+//                     >
+//                       {t.label}
+//                       <span
+//                         className={clsx(
+//                           "ml-2 text-xs px-2 py-0.5 rounded-full",
+//                           active
+//                             ? "bg-white/15 text-white"
+//                             : "bg-[#ecebe8] text-[#040303]"
+//                         )}
+//                       >
+//                         {t.count}
+//                       </span>
+//                     </button>
+//                   );
+//                 })}
+//               </div>
+//             </div>
+
+//             {/* Loading / Error */}
+//             {loading && (
+//               <div className="grid gap-4">
+//                 {[1, 2, 3].map((k) => (
+//                   <div
+//                     key={k}
+//                     className="border border-[#BFC0C0] rounded-2xl p-6 bg-white"
+//                   >
+//                     <div className="h-4 w-2/3 bg-[#ecebe8] rounded mb-3" />
+//                     <div className="h-3 w-full bg-[#ecebe8] rounded mb-2" />
+//                     <div className="h-3 w-5/6 bg-[#ecebe8] rounded" />
+//                     <div className="mt-5 flex gap-2">
+//                       <div className="h-7 w-24 bg-[#ecebe8] rounded-full" />
+//                       <div className="h-7 w-28 bg-[#ecebe8] rounded-full" />
+//                     </div>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+
+//             {!loading && error && (
+//               <div className="bg-white border border-red-200 rounded-2xl p-6">
+//                 <p className="text-red-600 font-extrabold">Error</p>
+//                 <p className="text-sm text-red-500 mt-1">{error}</p>
+
+//                 <div className="mt-4 rounded-xl border border-[#BFC0C0] bg-[#ecebe8] p-4">
+//                   <p className="text-sm text-[#040303]/80">
+//                     Check backend:{" "}
+//                     <span className="font-semibold">http://localhost:5000</span>{" "}
+//                     and route{" "}
+//                     <span className="font-semibold">/api/recommendations</span>.
+//                   </p>
+//                 </div>
+//               </div>
+//             )}
+
+//             {/* Summary cards */}
+//             {!loading && !error && (
+//               <div className="grid gap-4 md:grid-cols-3">
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <h3 className="font-bold text-[#040303]">Pending</h3>
+//                   <p className="text-xs text-[#040303]/60 mt-1">
+//                     Need your attention
+//                   </p>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {pendingCount}
+//                   </div>
+//                 </div>
+
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <h3 className="font-bold text-[#040303]">In Progress</h3>
+//                   <p className="text-xs text-[#040303]/60 mt-1">
+//                     You’re working on these
+//                   </p>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {progressCount}
+//                   </div>
+//                 </div>
+
+//                 <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white hover:shadow-sm transition">
+//                   <h3 className="font-bold text-[#040303]">Completed</h3>
+//                   <p className="text-xs text-[#040303]/60 mt-1">
+//                     Done & tracked
+//                   </p>
+//                   <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+//                     {doneCount}
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+
+//             {/* List */}
+//             {!loading && !error && (
+//               <div className="space-y-4">
+//                 {filtered.length === 0 ? (
+//                   <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//                     <div className="py-10 text-center">
+//                       <div className="mx-auto w-14 h-14 rounded-2xl bg-[#ecebe8] border border-[#BFC0C0] flex items-center justify-center">
+//                         <span className="w-3 h-3 rounded-full bg-[#EF8354]" />
+//                       </div>
+//                       <p className="mt-4 font-extrabold text-[#040303]">
+//                         No recommendations found
+//                       </p>
+//                       <p className="mt-2 text-sm text-[#040303]/60 max-w-xl mx-auto">
+//                         Try changing filters or add more financial data
+//                         (income/assets/liabilities/cards) to generate better
+//                         insights.
+//                       </p>
+//                     </div>
+//                   </div>
+//                 ) : (
+//                   filtered.map((r) => (
+//                     <div
+//                       key={r.id}
+//                       className="group border border-[#BFC0C0] rounded-2xl bg-white overflow-hidden hover:shadow-sm transition"
+//                     >
+//                       <div className="flex">
+//                         <div className={clsx("w-2", leftAccent(r.priority))} />
+
+//                         <div className="flex-1 p-6">
+//                           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+//                             <div className="flex-1 min-w-0">
+//                               <div className="flex flex-wrap items-center gap-2">
+//                                 <h2 className="text-xl font-bold text-[#040303]">
+//                                   {r.title}
+//                                 </h2>
+
+//                                 <span
+//                                   className={clsx(
+//                                     "text-xs px-3 py-2 rounded-full font-semibold",
+//                                     priorityBadge(r.priority)
+//                                   )}
+//                                 >
+//                                   {r.priority} priority
+//                                 </span>
+
+//                                 <span
+//                                   className={clsx(
+//                                     "text-xs px-3 py-2 rounded-full font-semibold",
+//                                     statusBadge(r.status)
+//                                   )}
+//                                 >
+//                                   {r.status}
+//                                 </span>
+//                               </div>
+
+//                               <p className="text-sm text-[#040303]/70 mt-3 leading-relaxed">
+//                                 {r.description}
+//                               </p>
+//                             </div>
+
+//                             {/* DROPDOWN */}
+//                             <div className="flex items-center gap-2">
+//                               <span className="text-xs text-[#040303]/50 hidden sm:inline">
+//                                 Update status
+//                               </span>
+
+//                               <div className="relative">
+//                                 <select
+//                                   value={r.status}
+//                                   onChange={(e) =>
+//                                     updateStatus(r.id, e.target.value)
+//                                   }
+//                                   className="appearance-none border border-[#BFC0C0] rounded-xl px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+//                                 >
+//                                   <option value="pending">Pending</option>
+//                                   <option value="in-progress">In progress</option>
+//                                   <option value="completed">Completed</option>
+//                                 </select>
+
+//                                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+//                                   ▼
+//                                 </span>
+//                               </div>
+//                             </div>
+//                           </div>
+
+//                           <div className="mt-5 pt-4 border-t border-[#BFC0C0]/60 flex items-center justify-between text-xs text-[#040303]/60">
+//                             <span>Tip: do high priority first to improve faster.</span>
+//                             <span className="group-hover:text-[#040303] transition">
+//                               FinSage AI
+//                             </span>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   ))
+//                 )}
+//               </div>
+//             )}
+
+//             {/* Info card */}
+//             {!loading && !error && (
+//               <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+//                 <h3 className="font-bold text-[#040303]">
+//                   How Recommendations Work
+//                 </h3>
+//                 <p className="text-sm text-[#040303]/70 mt-2">
+//                   FinSage analyzes your financial data and generates simple,
+//                   practical actions to improve your financial health.
+//                 </p>
+
+//                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">Track progress</p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       Update the status for each recommendation.
+//                     </p>
+//                   </div>
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">Focus smart</p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       Prioritize high urgency items first.
+//                     </p>
+//                   </div>
+//                   <div className="rounded-xl border border-[#BFC0C0] bg-white p-4">
+//                     <p className="text-sm font-bold text-[#040303]">Keep updating data</p>
+//                     <p className="text-xs text-[#040303]/60 mt-1">
+//                       New inputs lead to better recommendations.
+//                     </p>
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//         </main>
+
+//         <ChatBotWidget />
+//       </div>
+
+//       {/* Footer full background */}
+//       <div className="w-full bg-[#ebe4e1]">
+//         <DashboardFooter />
+//       </div>
+//     </div>
+//   );
+// }
+
+import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 import DashboardNavbar from "../components/dashbord/DashboardNavbar";
 import DashbordSidebar from "../components/dashbord/DashbordSidebar";
 import DashboardFooter from "../components/dashbord/DashboardFooter";
 import ChatBotWidget from "../components/dashbord/ChatBotWidget";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+function splitToBullets(text) {
+  if (!text) return [];
+
+  const rawLines = String(text)
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  const cleaned = rawLines.map((l) => l.replace(/^[-*•\d+.)\s]+/, "").trim());
+
+  if (cleaned.length <= 1) {
+    return String(text)
+      .split(". ")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 8)
+      .slice(0, 10);
+  }
+
+  return cleaned.slice(0, 12);
+}
+
+function makePriority(line) {
+  const l = line.toLowerCase();
+  if (
+    l.includes("urgent") ||
+    l.includes("high") ||
+    l.includes("immediately") ||
+    l.includes("asap") ||
+    l.includes("debt") ||
+    l.includes("overdue")
+  )
+    return "high";
+  if (l.includes("consider") || l.includes("improve") || l.includes("reduce"))
+    return "medium";
+  return "low";
+}
+
+function clsx(...arr) {
+  return arr.filter(Boolean).join(" ");
+}
+
 export default function RecommendationsPage() {
   const [collapsed, setCollapsed] = useState(true);
 
-  // simple local list (later replace with backend)
-  const [recommendations, setRecommendations] = useState([
-    // keep empty if you want:
-    // { id: 1, title: "Build an emergency fund", description: "Save 3–6 months of expenses.", priority: "high", status: "pending" },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // simple counts (no advanced logic)
-  const pendingCount = recommendations.filter((r) => r.status === "pending").length;
-  const progressCount = recommendations.filter((r) => r.status === "in-progress").length;
-  const doneCount = recommendations.filter((r) => r.status === "completed").length;
+  const [recommendations, setRecommendations] = useState([]);
 
-  function updateStatus(id, newStatus) {
-    const updated = recommendations.map((r) => {
-      if (r.id === id) {
-        return { ...r, status: newStatus };
+  // UI-only states (no backend changes)
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await axios.get(`${API_BASE}/api/recommendations`, {
+          withCredentials: true,
+        });
+
+        const aiText = res?.data?.data?.recommendations;
+        const bullets = splitToBullets(aiText);
+
+        const list = bullets.map((line, idx) => ({
+          id: idx + 1,
+          title: line.length > 70 ? `${line.slice(0, 70)}...` : line,
+          description: line,
+          priority: makePriority(line),
+          status: "pending",
+        }));
+
+        setRecommendations(list);
+      } catch (e) {
+        const msg =
+          e?.response?.data?.message ||
+          e?.message ||
+          "Failed to load recommendations.";
+        setError(msg);
+        setRecommendations([]);
+      } finally {
+        setLoading(false);
       }
-      return r;
-    });
-    setRecommendations(updated);
+    };
+
+    fetchRecommendations();
+  }, []);
+
+  const pendingCount = useMemo(
+    () => recommendations.filter((r) => r.status === "pending").length,
+    [recommendations]
+  );
+
+  
+  const progressCount = useMemo(
+    () => recommendations.filter((r) => r.status === "in-progress").length,
+    [recommendations]
+  );
+
+  const doneCount = useMemo(
+    () => recommendations.filter((r) => r.status === "completed").length,
+    [recommendations]
+  );
+
+  const completionPct = useMemo(() => {
+    const total = recommendations.length || 0;
+    if (!total) return 0;
+    return Math.round((doneCount / total) * 100);
+  }, [recommendations.length, doneCount]);
+
+  //  normalize: if user selects "In progress" from older saved state
+  function normalizeStatus(s) {
+    if (s === "In progress") return "in-progress";
+    return s;
   }
 
-  // super simple badge styles (no helper functions)
-  function priorityClass(p) {
+  function updateStatus(id, newStatus) {
+    setRecommendations((prev) =>
+      prev.map((r) =>
+        r.id === id ? { ...r, status: normalizeStatus(newStatus) } : r
+      )
+    );
+  }
+
+  function priorityBadge(p) {
     if (p === "high") return "bg-[#EF8354] text-white";
     if (p === "medium") return "bg-[#BFC0C0] text-[#040303]";
     return "bg-white border border-[#BFC0C0] text-[#040303]";
   }
 
-  function statusClass(s) {
-    if (s === "completed") return "bg-[#040303] text-white";
-    if (s === "in-progress") return "bg-[#EF8354] text-white";
+  function statusBadge(s) {
+    
+    const v = normalizeStatus(s);
+    if (v === "completed") return "bg-[#040303] text-white";
+    if (v === "In progress") return "bg-[#EF8354] text-white";
     return "bg-white border border-[#BFC0C0] text-[#040303]";
   }
 
+  function leftAccent(priority) {
+    if (priority === "high") return "bg-[#EF8354]";
+    if (priority === "medium") return "bg-[#BFC0C0]";
+    return "bg-[#ecebe8]";
+  }
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    return recommendations
+      .filter((r) => {
+        if (statusFilter === "all") return true;
+        //  normalize compare
+        return normalizeStatus(r.status) === statusFilter;
+      })
+      .filter((r) => {
+        if (priorityFilter === "all") return true;
+        return r.priority === priorityFilter;
+      })
+      .filter((r) => {
+        if (!q) return true;
+        return (
+          r.title.toLowerCase().includes(q) ||
+          r.description.toLowerCase().includes(q)
+        );
+      });
+  }, [recommendations, query, statusFilter, priorityFilter]);
+
+  const tabs = [
+    { key: "all", label: "All", count: recommendations.length },
+    { key: "pending", label: "Pending", count: pendingCount },
+    { key: "in-progress", label: "In Progress", count: progressCount },
+    { key: "completed", label: "Completed", count: doneCount },
+  ];
+
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <DashboardNavbar userName="kithvin" />
+    //  only background fix (no redesign)
+    <div className="min-h-screen bg-[#ebe4e1] flex flex-col">
+      <DashboardNavbar />
 
       <div className="flex flex-1 min-h-0">
         <DashbordSidebar
@@ -52,122 +1283,231 @@ export default function RecommendationsPage() {
           onToggle={() => setCollapsed((prev) => !prev)}
         />
 
-        <main className="flex-1 min-w-0 bg-white overflow-auto">
+        <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
           <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
-            {/* Header */}
-            <div>
-              <h1 className="text-3xl font-bold text-[#040303]">Recommendations</h1>
-              <p className="text-sm text-[#BFC0C0]">
-                AI-powered insights to improve your financial health
-              </p>
-            </div>
+            {/* HERO HEADER */}
+            <div className="border border-[#BFC0C0] rounded-2xl p-6 bg-white">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#BFC0C0] bg-white">
+                    <span className="w-2 h-2 rounded-full bg-[#EF8354]" />
+                    <span className="text-xs font-semibold text-[#040303]">
+                      AI Insights
+                    </span>
+                    <span className="text-xs text-[#BFC0C0]">
+                      • Personalized
+                    </span>
+                  </div>
 
-            {/* Summary cards */}
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-                <h3 className="font-semibold text-[#040303]">Pending</h3>
-                <p className="text-xs text-[#BFC0C0] mt-1">Recommendations to review</p>
-                <div className="text-4xl font-bold mt-6 text-[#EF8354]">{pendingCount}</div>
-              </div>
+                  <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[#040303]">
+                    Recommendations
+                  </h1>
+                  <p className="mt-2 text-sm text-[#040303]/70 max-w-2xl">
+                    Actionable steps based on your income, assets, liabilities,
+                    and cards track progress and improve your financial health.
+                  </p>
 
-              <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-                <h3 className="font-semibold text-[#040303]">In Progress</h3>
-                <p className="text-xs text-[#BFC0C0] mt-1">Currently working on</p>
-                <div className="text-4xl font-bold mt-6 text-[#040303]">{progressCount}</div>
-              </div>
+                  {/* Progress bar */}
+                  <div className="mt-5">
+                    <div className="flex items-center justify-between text-xs text-[#040303]/70">
+                      <span>Overall progress</span>
+                      <span className="font-semibold text-[#040303]">
+                        {completionPct}%
+                      </span>
+                    </div>
+                    <div className="mt-2 h-2 rounded-full bg-[#ecebe8] overflow-hidden border border-[#BFC0C0]/70">
+                      <div
+                        className="h-full bg-[#EF8354]"
+                        style={{ width: `${completionPct}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-              <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-                <h3 className="font-semibold text-[#040303]">Completed</h3>
-                <p className="text-xs text-[#BFC0C0] mt-1">Successfully implemented</p>
-                <div className="text-4xl font-bold mt-6 text-[#040303]">{doneCount}</div>
-              </div>
-            </div>
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="border border-[#BFC0C0] rounded-xl px-4 py-2 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+                  >
+                    Refresh
+                  </button>
 
-            {/* List */}
-            <div className="space-y-4">
-              {recommendations.length === 0 ? (
-                <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-                  <div className="py-8 text-center text-[#BFC0C0]">
-                    <p>No recommendations available yet.</p>
-                    <p className="text-sm">
-                      Add your financial data to receive personalized recommendations.
+                  <div className="border border-[#BFC0C0] rounded-xl px-4 py-2 bg-white">
+                    <p className="text-xs text-[#040303]/60">Total items</p>
+                    <p className="text-xl font-extrabold text-[#040303] text-center">
+                      {recommendations.length}
                     </p>
                   </div>
                 </div>
-              ) : (
-                recommendations.map((r) => (
-                  <div
-                    key={r.id}
-                    className="bg-white border border-[#BFC0C0] rounded-lg p-6"
-                  >
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-xl font-semibold text-[#040303]">
-                            {r.title}
-                          </h2>
+              </div>
 
-                          <span
-                            className={`text-xs px-2 py-1 rounded-md ${priorityClass(
-                              r.priority
-                            )}`}
-                          >
-                            {r.priority} priority
-                          </span>
+              {/* Search + Priority Filter */}
+              <div className="mt-6 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+                <div className="flex-1">
+                  <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search recommendations..."
+                    className="w-full border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  {/* PRIORITY DROPDOWN */}
+                  <div className="relative">
+                    <select
+                      value={priorityFilter}
+                      onChange={(e) => setPriorityFilter(e.target.value)}
+                      className="appearance-none border border-[#BFC0C0] rounded-xl px-4 py-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+                    >
+                      <option value="all">All priorities</option>
+                      <option value="high">High priority</option>
+                      <option value="medium">Medium priority</option>
+                      <option value="low">Low priority</option>
+                    </select>
+
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+                      ▼
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setQuery("");
+                      setStatusFilter("all");
+                      setPriorityFilter("all");
+                    }}
+                    className="border border-[#BFC0C0] rounded-xl px-4 py-3 text-sm font-semibold text-[#040303] hover:bg-[#ecebe8] transition"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              {/* Tabs */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                {tabs.map((t) => {
+                  const active = statusFilter === t.key;
+                  return (
+                    <button
+                      key={t.key}
+                      onClick={() => setStatusFilter(t.key)}
+                      className={clsx(
+                        "px-4 py-2 rounded-full text-sm font-semibold border transition",
+                        active
+                          ? "bg-[#EF8354] text-white border-[#EF8354]"
+                          : "bg-white text-[#040303] border-[#BFC0C0] hover:bg-[#ecebe8]"
+                      )}
+                    >
+                      {t.label}
+                      <span
+                        className={clsx(
+                          "ml-2 text-xs px-2 py-0.5 rounded-full",
+                          active
+                            ? "bg-white/15 text-white"
+                            : "bg-[#ecebe8] text-[#040303]"
+                        )}
+                      >
+                        {t.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ... YOUR REST CODE SAME ... */}
+
+            {!loading && !error && (
+              <div className="space-y-4">
+                {filtered.map((r) => (
+                  <div
+                    key={r.id} //  add key back (necessary)
+                    className="group border border-[#BFC0C0] rounded-2xl bg-white overflow-hidden hover:shadow-sm transition"
+                  >
+                    <div className="flex">
+                      <div className={clsx("w-2", leftAccent(r.priority))} />
+
+                      <div className="flex-1 p-6">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h2 className="text-xl font-bold text-[#040303]">
+                                {r.title}
+                              </h2>
+
+                              <span
+                                className={clsx(
+                                  "text-xs px-3 py-2 rounded-full font-semibold",
+                                  priorityBadge(r.priority)
+                                )}
+                              >
+                                {r.priority} priority
+                              </span>
+
+                              <span
+                                className={clsx(
+                                  "text-xs px-3 py-2 rounded-full font-semibold",
+                                  statusBadge(r.status)
+                                )}
+                              >
+                                {normalizeStatus(r.status)}
+                              </span>
+                            </div>
+
+                            <p className="text-sm text-[#040303]/70 mt-3 leading-relaxed">
+                              {r.description}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-[#040303]/50 hidden sm:inline">
+                              Update status
+                            </span>
+
+                            <div className="relative">
+                              <select
+                                value={normalizeStatus(r.status)}
+                                onChange={(e) =>
+                                  updateStatus(r.id, e.target.value)
+                                }
+                                className="appearance-none border border-[#BFC0C0] rounded-xl px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354] bg-white"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In progress</option>
+                                <option value="completed">Completed</option>
+                              </select>
+
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+                                ▼
+                              </span>
+                            </div>
+                          </div>
                         </div>
 
-                        <p className="text-sm text-[#BFC0C0] mt-2">{r.description}</p>
+                        <div className="mt-5 pt-4 border-t border-[#BFC0C0]/60 flex items-center justify-between text-xs text-[#040303]/60">
+                          <span>Tip: do high priority first to improve faster.</span>
+                          <span className="group-hover:text-[#040303] transition">
+                            FinSage AI
+                          </span>
+                        </div>
                       </div>
-
-                      <div className="flex flex-col items-start sm:items-end gap-2">
-                        <span
-                          className={`text-xs px-2 py-1 rounded-md ${statusClass(
-                            r.status
-                          )}`}
-                        >
-                          {r.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <p className="text-sm text-[#BFC0C0]">Update Status</p>
-
-                      <select
-                        value={r.status}
-                        onChange={(e) => updateStatus(r.id, e.target.value)}
-                        className="border border-[#BFC0C0] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
-                      >
-                        <option value="pending">pending</option>
-                        <option value="in-progress">in-progress</option>
-                        <option value="completed">completed</option>
-                      </select>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
-
-            {/* Info card */}
-            <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-              <h3 className="font-semibold text-[#040303]">How Recommendations Work</h3>
-              <p className="text-sm text-[#BFC0C0] mt-2">
-                FinSage analyzes your financial data to provide simple recommendations to improve
-                your financial health.
-              </p>
-
-              <ul className="mt-3 list-disc list-inside text-sm text-[#040303] space-y-1">
-                <li>Update status to track progress</li>
-                <li>Focus on high priority items first</li>
-                <li>New recommendations appear when new data is added</li>
-              </ul>
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </main>
+
         <ChatBotWidget />
       </div>
 
-      <DashboardFooter />
+      {/* footer background fix (necessary for full width look) */}
+      <div className="w-full bg-[#ebe4e1]">
+        <DashboardFooter />
+      </div>
     </div>
   );
 }
+
