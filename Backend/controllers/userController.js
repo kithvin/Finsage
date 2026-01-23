@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs"; // Import bcryptjs for password hashing
 import jwt from "jsonwebtoken"; // Import jsonwebtoken for token generation
 
 // Register User : /api/user/register
-
 export const Register = async (req, res) => {
   try {
     // Destructure name, email, and password from request body
@@ -28,7 +27,7 @@ export const Register = async (req, res) => {
 
     // Generate JWT token with user's ID
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "7d", // Token expiration time set to 7 days
     });
 
     // Set the JWT token in cookies
@@ -51,7 +50,6 @@ export const Register = async (req, res) => {
 };
 
 // Login User : /api/user/login
-
 export const login = async (req, res) => {
   try {
     // Destructure email and password from request body
@@ -83,7 +81,7 @@ export const login = async (req, res) => {
 
     // Generate JWT token after successful login
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "7d", // Token expiration time set to 7 days
     });
 
     // Set JWT token in cookies for authentication
@@ -100,17 +98,16 @@ export const login = async (req, res) => {
       user: { email: user.email, name: user.name },
     });
   } catch (error) {
-    console.log(error.message);
-    res.json({ success: false, message: error.message });
+    console.log(error.message); // Log the error in the console
+    res.json({ success: false, message: error.message }); // Send error response
   }
 };
 
 // Check Authentication : /api/user/is-auth
-
 export const isAuth = async (req, res) => {
   try {
     // Extract userId from the request body
-    //if error backend error use (const userId = req.user.id);
+    // If error occurs, use (const userId = req.user.id);
     const userId = req.user.id;
 
     // Find the user by ID and exclude the password field
@@ -119,7 +116,7 @@ export const isAuth = async (req, res) => {
     // Return the authenticated user data
     return res.json({ success: true, user });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message); // Log the error in the console
 
     // Handle errors and return failure response
     res.json({ success: false, message: error.message });
@@ -127,7 +124,6 @@ export const isAuth = async (req, res) => {
 };
 
 // Logout : /api/user/logout
-
 export const logout = async (req, res) => {
   try {
     // Clear the authentication token cookie
@@ -140,7 +136,7 @@ export const logout = async (req, res) => {
     // Return success message
     return res.json({ success: true, message: "Logged Out" });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message); // Log the error in the console
     // Handle errors and return failure response
     res.json({ success: false, message: error.message });
   }

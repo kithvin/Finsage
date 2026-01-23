@@ -3,6 +3,7 @@ import Card from "../models/cardModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
 
+// Controller to create a new card
 const createCard = catchAsync(async (req, res) => {
   const newCard = await Card.create(req.body);
 
@@ -14,6 +15,7 @@ const createCard = catchAsync(async (req, res) => {
   });
 });
 
+// Controller to retrieve all cards
 const getAllCards = catchAsync(async (req, res) => {
   const cards = await Card.find();
 
@@ -26,6 +28,7 @@ const getAllCards = catchAsync(async (req, res) => {
   });
 });
 
+// Controller to retrieve a single card by ID
 const getCard = catchAsync(async (req, res, next) => {
   const card = await Card.findById(req.params.id);
 
@@ -41,6 +44,7 @@ const getCard = catchAsync(async (req, res, next) => {
   });
 });
 
+// Controller to update a card by ID
 const updateCard = catchAsync(async (req, res, next) => {
   const card = await Card.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -59,6 +63,7 @@ const updateCard = catchAsync(async (req, res, next) => {
   });
 });
 
+// Controller to delete a card by ID
 const deleteCard = catchAsync(async (req, res, next) => {
   const card = await Card.findByIdAndDelete(req.params.id);
 

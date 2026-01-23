@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the schema for storing income details in the database
 const incomeSchema = new mongoose.Schema(
   {
     incomeSource: {

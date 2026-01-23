@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the schema for storing chat messages and responses
 const chatSchema = new mongoose.Schema(
   {
     user: {

@@ -1,5 +1,6 @@
 import { sendFeedbackEmail } from "../services/emailService.js";
 
+// Controller function to handle feedback submission and send feedback email to the admin.
 export const submitFeedback = async (req, res, next) => {
   try {
     const { name, role, comment } = req.body;

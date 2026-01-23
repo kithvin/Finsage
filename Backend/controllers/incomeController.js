@@ -51,12 +51,15 @@ export const updateIncome = catchAsync(async (req, res, next) => {
 });
 
 export const deleteIncome = catchAsync(async (req, res, next) => {
+  // Find and delete the income record by ID
   const income = await Income.findByIdAndDelete(req.params.id);
 
+  // If no income record is found, return an error
   if (!income) {
     return next(new AppError("No income record found with that ID", 404));
   }
 
+  // Respond with a 204 status code indicating successful deletion
   res.status(204).json({
     status: "success",
     data: null,

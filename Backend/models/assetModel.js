@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the schema for assets, including their name, type, and current value
 const assetSchema = new mongoose.Schema(
   {
     assetName: {

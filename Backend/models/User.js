@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
 
 }, {
     // Prevent Mongoose from removing empty objects from the schema
+    // This ensures that fields with empty objects (e.g., cartItems) are preserved in the database
     minimize: false
 });
 

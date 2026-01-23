@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 
+// This function sends a feedback email to the admin using the provided user details and comment.
 export const sendFeedbackEmail = async ({ name, role, comment }) => {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,

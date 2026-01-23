@@ -2,6 +2,7 @@ import Asset from "../models/assetModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
 
+// Controller to create a new asset
 const createAsset = catchAsync(async (req, res) => {
   const newAsset = await Asset.create(req.body);
 
@@ -11,6 +12,7 @@ const createAsset = catchAsync(async (req, res) => {
   });
 });
 
+// Controller to retrieve all assets
 const getAllAssets = catchAsync(async (req, res) => {
   const assets = await Asset.find();
 
@@ -21,6 +23,7 @@ const getAllAssets = catchAsync(async (req, res) => {
   });
 });
 
+// Controller to retrieve a single asset by ID
 const getAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findById(req.params.id);
 
@@ -34,6 +37,7 @@ const getAsset = catchAsync(async (req, res, next) => {
   });
 });
 
+// Controller to update an asset by ID
 const updateAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -50,6 +54,7 @@ const updateAsset = catchAsync(async (req, res, next) => {
   });
 });
 
+// Controller to delete an asset by ID
 const deleteAsset = catchAsync(async (req, res, next) => {
   const asset = await Asset.findByIdAndDelete(req.params.id);
 

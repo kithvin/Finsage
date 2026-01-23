@@ -1,6 +1,7 @@
 // models/cardModel.js
 import mongoose from "mongoose";
 
+// Define the schema for storing card details in the database
 const cardSchema = new mongoose.Schema(
   {
     cardName: {

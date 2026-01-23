@@ -13,6 +13,7 @@ export const getRecommendations = catchAsync(async (req, res, next) => {
     Card.find(),
   ]);
 
+  // Create a summary of the user's financial data to be used for generating recommendations
   const financialSummary = {
     incomes: incomes.map((i) => ({
       source: i.incomeSource,
@@ -37,7 +38,7 @@ export const getRecommendations = catchAsync(async (req, res, next) => {
     })),
   };
 
-  // FIXED: now exists in geminiService
+  // Generate financial advice based on the summarized data
   const recommendations = await geminiService.generateAdvice(financialSummary);
 
   res.status(200).json({
