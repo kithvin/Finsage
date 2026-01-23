@@ -1,6 +1,7 @@
+
 // // src/pages/AssetsPage.jsx
-// import React, { useEffect, useState } from "react"; //added useEffect
-// import axios from "axios"; // added axios
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
 
 // import DashboardNavbar from "../components/dashbord/DashboardNavbar";
 // import DashbordSidebar from "../components/dashbord/DashbordSidebar";
@@ -17,10 +18,8 @@
 //   const [type, setType] = useState("");
 //   const [value, setValue] = useState("");
 
-//   //API base url from .env
 //   const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-//   // Fetch assets from backend when page loads
 //   useEffect(() => {
 //     async function fetchAssets() {
 //       try {
@@ -30,7 +29,6 @@
 
 //         const list = res.data?.data?.assets || [];
 
-//         // map backend fields -> frontend fields (UI stays same)
 //         setAssets(
 //           list.map((a) => ({
 //             id: a._id,
@@ -47,10 +45,11 @@
 //     fetchAssets();
 //   }, [API_BASE]);
 
-//   // simplest total
-//   const totalAssets = assets.reduce((sum, a) => sum + (a.value || 0), 0);
+//   const totalAssets = assets.reduce(
+//     (sum, a) => sum + (Number(a.value) || 0),
+//     0
+//   );
 
-//   // Add asset -> POST to backend
 //   async function addAsset(e) {
 //     e.preventDefault();
 
@@ -77,7 +76,6 @@
 //         ...prev,
 //       ]);
 
-//       // reset
 //       setName("");
 //       setType("");
 //       setValue("");
@@ -87,7 +85,6 @@
 //     }
 //   }
 
-//   // Delete asset -> DELETE from backend
 //   async function deleteAsset(id) {
 //     try {
 //       await axios.delete(`${API_BASE}/api/assets/${id}`, {
@@ -101,8 +98,8 @@
 //   }
 
 //   return (
-//     <div className="min-h-screen bg-white flex flex-col">
-//       <DashboardNavbar userName="kithvin" />
+//     <div className="min-h-screen bg-[#ebe4e1] flex flex-col">
+//       <DashboardNavbar />
 
 //       <div className="flex flex-1 min-h-0">
 //         <DashbordSidebar
@@ -110,53 +107,53 @@
 //           onToggle={() => setCollapsed((prev) => !prev)}
 //         />
 
-//         <main className="flex-1 min-w-0 bg-white overflow-auto">
+//         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
 //           <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
 //             {/* Header */}
 //             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
 //               <div>
 //                 <h1 className="text-3xl font-bold text-[#040303]">Assets</h1>
-//                 <p className="text-sm text-[#BFC0C0]">
+//                 <p className="text-sm text-[#040303]/60">
 //                   Track and manage your assets
 //                 </p>
 //               </div>
 
 //               <button
 //                 onClick={() => setOpen(true)}
-//                 className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition"
+//                 className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition"
 //               >
 //                 Add Asset
 //               </button>
 //             </div>
 
 //             {/* Total Assets */}
-//             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-//               <h3 className="font-semibold text-[#040303]">Total Assets</h3>
-//               <p className="text-xs text-[#BFC0C0] mt-1">
+//             <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+//               <h3 className="font-bold text-[#040303]">Total Assets</h3>
+//               <p className="text-xs text-[#040303]/60 mt-1">
 //                 Combined value of all your assets
 //               </p>
 
-//               <div className="text-4xl font-bold mt-6 text-[#EF8354]">
+//               <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
 //                 ${totalAssets.toLocaleString()}
 //               </div>
 //             </div>
 
 //             {/* Assets table */}
-//             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-//               <h3 className="font-semibold text-[#040303]">Your Assets</h3>
-//               <p className="text-xs text-[#BFC0C0] mt-1">
+//             <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+//               <h3 className="font-bold text-[#040303]">Your Assets</h3>
+//               <p className="text-xs text-[#040303]/60 mt-1">
 //                 All your tracked assets
 //               </p>
 
 //               <div className="mt-5">
 //                 {assets.length === 0 ? (
-//                   <div className="h-24 rounded-md bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#BFC0C0]">
+//                   <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60">
 //                     No assets added yet
 //                   </div>
 //                 ) : (
 //                   <div className="overflow-auto">
 //                     <table className="w-full text-sm">
-//                       <thead className="text-left text-[#BFC0C0]">
+//                       <thead className="text-left text-[#040303]/60">
 //                         <tr className="border-b border-[#BFC0C0]/60">
 //                           <th className="py-3">Name</th>
 //                           <th className="py-3">Type</th>
@@ -171,7 +168,7 @@
 //                             key={a.id}
 //                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
 //                           >
-//                             <td className="py-3 font-medium text-[#040303]">
+//                             <td className="py-3 font-semibold text-[#040303]">
 //                               {a.name}
 //                             </td>
 //                             <td className="py-3 text-[#040303]">{a.type}</td>
@@ -181,7 +178,7 @@
 //                             <td className="py-3 text-right">
 //                               <button
 //                                 onClick={() => deleteAsset(a.id)}
-//                                 className="mt-2 text-xs px-6 py-3 rounded-md bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
+//                                 className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
 //                               >
 //                                 Delete
 //                               </button>
@@ -204,20 +201,21 @@
 //                 />
 
 //                 <div className="relative min-h-screen flex items-center justify-center p-4">
-//                   <div className="w-full max-w-xl bg-white rounded-lg shadow-xl border border-[#BFC0C0]">
+//                   <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-[#BFC0C0]">
 //                     <div className="flex items-start justify-between px-6 pt-5">
 //                       <div>
-//                         <h3 className="text-lg font-semibold text-[#040303]">
+//                         <h3 className="text-lg font-bold text-[#040303]">
 //                           Add New Asset
 //                         </h3>
-//                         <p className="text-sm text-[#BFC0C0] mt-1">
+//                         <p className="text-sm text-[#040303]/60 mt-1">
 //                           Add a new asset to track your wealth
 //                         </p>
 //                       </div>
 
 //                       <button
 //                         onClick={() => setOpen(false)}
-//                         className="text-[#BFC0C0] hover:text-[#040303] px-2"
+//                         className="text-[#040303]/50 hover:text-[#040303] px-2"
+//                         aria-label="Close"
 //                       >
 //                         ✕
 //                       </button>
@@ -228,40 +226,40 @@
 //                       className="px-6 pb-6 pt-4 space-y-4"
 //                     >
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Asset Name
 //                         </label>
 //                         <input
 //                           value={name}
 //                           onChange={(e) => setName(e.target.value)}
-//                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                           className="w-full mt-2 border border-[#BFC0C0] rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           placeholder="e.g., Savings Account"
 //                           required
 //                         />
 //                       </div>
 
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Asset Type
 //                         </label>
 //                         <input
 //                           value={type}
 //                           onChange={(e) => setType(e.target.value)}
-//                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                           className="w-full mt-2 border border-[#BFC0C0] rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           placeholder="e.g., Cash, Property, Investment"
 //                           required
 //                         />
 //                       </div>
 
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Current Value ($)
 //                         </label>
 //                         <input
 //                           value={value}
 //                           onChange={(e) => setValue(e.target.value)}
 //                           type="number"
-//                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                           className="w-full mt-2 border border-[#BFC0C0] rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           placeholder="0"
 //                           required
 //                         />
@@ -269,7 +267,7 @@
 
 //                       <button
 //                         type="submit"
-//                         className="w-full bg-[#EF8354] text-white py-2.5 rounded-md font-medium hover:opacity-90 transition"
+//                         className="w-full bg-[#EF8354] text-white py-2.5 rounded-xl font-semibold hover:opacity-90 transition"
 //                       >
 //                         Add Asset
 //                       </button>
@@ -280,10 +278,14 @@
 //             ) : null}
 //           </div>
 //         </main>
+
 //         <ChatBotWidget />
 //       </div>
 
-//       <DashboardFooter />
+//       {/* Footer full background (prevents white gap) */}
+//       <div className="w-full bg-[#ebe4e1]">
+//         <DashboardFooter />
+//       </div>
 //     </div>
 //   );
 // }
@@ -334,7 +336,10 @@ export default function AssetsPage() {
     fetchAssets();
   }, [API_BASE]);
 
-  const totalAssets = assets.reduce((sum, a) => sum + (Number(a.value) || 0), 0);
+  const totalAssets = assets.reduce(
+    (sum, a) => sum + (Number(a.value) || 0),
+    0
+  );
 
   async function addAsset(e) {
     e.preventDefault();
@@ -394,38 +399,40 @@ export default function AssetsPage() {
         />
 
         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
-          <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
+          <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {/* Header */}
             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
               <div>
-                <h1 className="text-3xl font-bold text-[#040303]">Assets</h1>
-                <p className="text-sm text-[#040303]/60">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#040303]">
+                  Assets
+                </h1>
+                <p className="text-xs sm:text-sm text-[#040303]/60">
                   Track and manage your assets
                 </p>
               </div>
 
               <button
                 onClick={() => setOpen(true)}
-                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition"
+                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition w-full sm:w-auto"
               >
                 Add Asset
               </button>
             </div>
 
             {/* Total Assets */}
-            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
               <h3 className="font-bold text-[#040303]">Total Assets</h3>
               <p className="text-xs text-[#040303]/60 mt-1">
                 Combined value of all your assets
               </p>
 
-              <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+              <div className="text-3xl sm:text-4xl font-extrabold mt-6 text-[#EF8354]">
                 ${totalAssets.toLocaleString()}
               </div>
             </div>
 
             {/* Assets table */}
-            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
               <h3 className="font-bold text-[#040303]">Your Assets</h3>
               <p className="text-xs text-[#040303]/60 mt-1">
                 All your tracked assets
@@ -433,18 +440,26 @@ export default function AssetsPage() {
 
               <div className="mt-5">
                 {assets.length === 0 ? (
-                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60">
+                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60 px-4 text-center">
                     No assets added yet
                   </div>
                 ) : (
-                  <div className="overflow-auto">
-                    <table className="w-full text-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[760px]">
                       <thead className="text-left text-[#040303]/60">
                         <tr className="border-b border-[#BFC0C0]/60">
-                          <th className="py-3">Name</th>
-                          <th className="py-3">Type</th>
-                          <th className="py-3">Value</th>
-                          <th className="py-3 text-right">Action</th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Name
+                          </th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Type
+                          </th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Value
+                          </th>
+                          <th className="py-3 text-right whitespace-nowrap pr-0">
+                            Action
+                          </th>
                         </tr>
                       </thead>
 
@@ -454,14 +469,16 @@ export default function AssetsPage() {
                             key={a.id}
                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
                           >
-                            <td className="py-3 font-semibold text-[#040303]">
+                            <td className="py-3 font-semibold text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
                               {a.name}
                             </td>
-                            <td className="py-3 text-[#040303]">{a.type}</td>
-                            <td className="py-3 text-[#040303]">
+                            <td className="py-3 text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
+                              {a.type}
+                            </td>
+                            <td className="py-3 text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
                               ${Number(a.value).toLocaleString()}
                             </td>
-                            <td className="py-3 text-right">
+                            <td className="py-3 text-right whitespace-nowrap pr-0">
                               <button
                                 onClick={() => deleteAsset(a.id)}
                                 className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
@@ -486,9 +503,9 @@ export default function AssetsPage() {
                   onClick={() => setOpen(false)}
                 />
 
-                <div className="relative min-h-screen flex items-center justify-center p-4">
+                <div className="relative min-h-screen flex items-center justify-center p-3 sm:p-4 overflow-auto">
                   <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-[#BFC0C0]">
-                    <div className="flex items-start justify-between px-6 pt-5">
+                    <div className="flex items-start justify-between px-4 sm:px-6 pt-5">
                       <div>
                         <h3 className="text-lg font-bold text-[#040303]">
                           Add New Asset
@@ -509,7 +526,7 @@ export default function AssetsPage() {
 
                     <form
                       onSubmit={addAsset}
-                      className="px-6 pb-6 pt-4 space-y-4"
+                      className="px-4 sm:px-6 pb-6 pt-4 space-y-4"
                     >
                       <div>
                         <label className="text-sm font-semibold text-[#040303]">
@@ -568,7 +585,6 @@ export default function AssetsPage() {
         <ChatBotWidget />
       </div>
 
-      {/* Footer full background (prevents white gap) */}
       <div className="w-full bg-[#ebe4e1]">
         <DashboardFooter />
       </div>

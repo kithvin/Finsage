@@ -470,7 +470,10 @@ export default function CreditCardsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const totalBalance = cards.reduce((sum, c) => sum + (Number(c.balance) || 0), 0);
+  const totalBalance = cards.reduce(
+    (sum, c) => sum + (Number(c.balance) || 0),
+    0
+  );
   const totalLimit = cards.reduce((sum, c) => sum + (Number(c.limit) || 0), 0);
 
   const utilization =
@@ -550,21 +553,23 @@ export default function CreditCardsPage() {
         />
 
         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
-          <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
+          {/* ✅ mobile padding only */}
+          <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {/* Header */}
             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
               <div>
-                <h1 className="text-3xl font-bold text-[#040303]">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#040303]">
                   Credit Cards
                 </h1>
-                <p className="text-sm text-[#040303]/60">
+                <p className="text-xs sm:text-sm text-[#040303]/60">
                   Track and manage your credit cards
                 </p>
               </div>
 
+              {/* ✅ mobile: full width button */}
               <button
                 onClick={() => setIsOpen(true)}
-                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition"
+                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition w-full sm:w-auto"
               >
                 Add Credit Card
               </button>
@@ -572,33 +577,33 @@ export default function CreditCardsPage() {
 
             {/* Summary cards */}
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
                 <h3 className="font-bold text-[#040303]">Total Balance</h3>
                 <p className="text-xs text-[#040303]/60 mt-1">
                   Combined balance across all cards
                 </p>
-                <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+                <div className="text-3xl sm:text-4xl font-extrabold mt-6 text-[#EF8354]">
                   ${totalBalance.toLocaleString()}
                 </div>
               </div>
 
-              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
                 <h3 className="font-bold text-[#040303]">Total Credit Limit</h3>
                 <p className="text-xs text-[#040303]/60 mt-1">
                   Combined credit limit across all cards
                 </p>
-                <div className="text-4xl font-extrabold mt-6 text-[#040303]">
+                <div className="text-3xl sm:text-4xl font-extrabold mt-6 text-[#040303]">
                   ${totalLimit.toLocaleString()}
                 </div>
               </div>
 
-              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+              <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
                 <h3 className="font-bold text-[#040303]">Credit Utilization</h3>
                 <p className="text-xs text-[#040303]/60 mt-1">
                   Percentage of credit used
                 </p>
 
-                <div className="text-4xl font-extrabold mt-6 text-[#040303]">
+                <div className="text-3xl sm:text-4xl font-extrabold mt-6 text-[#040303]">
                   {utilization}%
                 </div>
 
@@ -616,7 +621,7 @@ export default function CreditCardsPage() {
             </div>
 
             {/* Cards Table */}
-            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
               <h3 className="font-bold text-[#040303]">Your Credit Cards</h3>
               <p className="text-xs text-[#040303]/60 mt-1">
                 All your tracked credit cards
@@ -624,23 +629,30 @@ export default function CreditCardsPage() {
 
               <div className="mt-5">
                 {cards.length === 0 ? (
-                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex flex-col items-center justify-center text-sm text-[#040303]/60">
+                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex flex-col items-center justify-center text-sm text-[#040303]/60 px-4 text-center">
                     <p>No credit cards added yet.</p>
                     <p className="text-xs">
                       Click “Add Credit Card” to get started.
                     </p>
                   </div>
                 ) : (
-                  <div className="overflow-auto">
-                    <table className="w-full text-sm">
+                  /* ✅ MOBILE FIX: add gaps + prevent squish */
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[820px]">
                       <thead className="text-left text-[#040303]/60">
                         <tr className="border-b border-[#BFC0C0]/60">
-                          <th className="py-3">Card</th>
-                          <th className="py-3">Balance</th>
-                          <th className="py-3">Limit</th>
-                          <th className="py-3">APR</th>
-                          <th className="py-3">Due Date</th>
-                          <th className="py-3 text-right">Action</th>
+                          <th className="py-3 pr-8 whitespace-nowrap">Card</th>
+                          <th className="py-3 pr-8 whitespace-nowrap">
+                            Balance
+                          </th>
+                          <th className="py-3 pr-8 whitespace-nowrap">Limit</th>
+                          <th className="py-3 pr-8 whitespace-nowrap">APR</th>
+                          <th className="py-3 pr-8 whitespace-nowrap">
+                            Due Date
+                          </th>
+                          <th className="py-3 text-right whitespace-nowrap">
+                            Action
+                          </th>
                         </tr>
                       </thead>
 
@@ -650,18 +662,22 @@ export default function CreditCardsPage() {
                             key={c.id}
                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
                           >
-                            <td className="py-3 font-semibold text-[#040303]">
+                            <td className="py-3 pr-8 font-semibold text-[#040303] whitespace-nowrap">
                               {c.name}
                             </td>
-                            <td className="py-3 text-[#040303]">
+                            <td className="py-3 pr-8 text-[#040303] whitespace-nowrap">
                               ${Number(c.balance).toLocaleString()}
                             </td>
-                            <td className="py-3 text-[#040303]">
+                            <td className="py-3 pr-8 text-[#040303] whitespace-nowrap">
                               ${Number(c.limit).toLocaleString()}
                             </td>
-                            <td className="py-3 text-[#040303]">{c.apr}%</td>
-                            <td className="py-3 text-[#040303]">{c.dueDate}</td>
-                            <td className="py-3 text-right">
+                            <td className="py-3 pr-8 text-[#040303] whitespace-nowrap">
+                              {c.apr}%
+                            </td>
+                            <td className="py-3 pr-8 text-[#040303] whitespace-nowrap">
+                              {c.dueDate}
+                            </td>
+                            <td className="py-3 text-right whitespace-nowrap">
                               <button
                                 onClick={() => deleteCard(c.id)}
                                 className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
@@ -686,9 +702,10 @@ export default function CreditCardsPage() {
                   onClick={() => setIsOpen(false)}
                 />
 
-                <div className="relative min-h-screen flex items-center justify-center p-4">
+                {/* ✅ mobile modal spacing only */}
+                <div className="relative min-h-screen flex items-center justify-center p-3 sm:p-4 overflow-auto">
                   <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-[#BFC0C0]">
-                    <div className="flex items-start justify-between px-6 pt-5">
+                    <div className="flex items-start justify-between px-4 sm:px-6 pt-5">
                       <div>
                         <h3 className="text-lg font-bold text-[#040303]">
                           Add New Credit Card
@@ -708,7 +725,7 @@ export default function CreditCardsPage() {
 
                     <form
                       onSubmit={handleSubmit}
-                      className="px-6 pb-6 pt-4 space-y-4"
+                      className="px-4 sm:px-6 pb-6 pt-4 space-y-4"
                     >
                       <div>
                         <label className="text-sm font-semibold text-[#040303]">
@@ -795,11 +812,9 @@ export default function CreditCardsPage() {
         <ChatBotWidget />
       </div>
 
-      {/* Footer full background */}
       <div className="w-full bg-[#ebe4e1]">
         <DashboardFooter />
       </div>
     </div>
   );
 }
-

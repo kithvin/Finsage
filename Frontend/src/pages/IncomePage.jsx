@@ -1,3 +1,4 @@
+
 // // src/pages/IncomePage.jsx
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -10,13 +11,9 @@
 // export default function IncomePage() {
 //   const [collapsed, setCollapsed] = useState(true);
 
-//   // simple list (later: replace with backend fetch)
 //   const [incomes, setIncomes] = useState([]);
-
-//   // simple modal state
 //   const [open, setOpen] = useState(false);
 
-//   // simple form object (easy to send to backend)
 //   const [form, setForm] = useState({
 //     source: "",
 //     amount: "",
@@ -57,7 +54,6 @@
 
 //   function calcAnnual(item) {
 //     const amt = Number(item.amount || 0);
-
 //     if (item.frequency === "monthly") return amt * 12;
 //     if (item.frequency === "yearly") return amt;
 //     return amt; // one-time
@@ -65,9 +61,7 @@
 
 //   function calcTotalAnnual(list) {
 //     let total = 0;
-//     for (let i = 0; i < list.length; i++) {
-//       total += calcAnnual(list[i]);
-//     }
+//     for (let i = 0; i < list.length; i++) total += calcAnnual(list[i]);
 //     return total;
 //   }
 
@@ -100,7 +94,6 @@
 //         ...p,
 //       ]);
 
-//       // reset form
 //       setForm({ source: "", amount: "", frequency: "monthly" });
 //       setOpen(false);
 //     } catch (err) {
@@ -113,7 +106,6 @@
 //       await axios.delete(`${API_BASE}/api/incomes/${id}`, {
 //         withCredentials: true,
 //       });
-
 //       setIncomes((p) => p.filter((x) => x.id !== id));
 //     } catch (err) {
 //       console.error("Delete income error:", err);
@@ -121,8 +113,8 @@
 //   }
 
 //   return (
-//     <div className="min-h-screen bg-white flex flex-col">
-//       <DashboardNavbar/>
+//     <div className="min-h-screen bg-[#ebe4e1] flex flex-col">
+//       <DashboardNavbar />
 
 //       <div className="flex flex-1 min-h-0">
 //         <DashbordSidebar
@@ -130,55 +122,53 @@
 //           onToggle={() => setCollapsed((prev) => !prev)}
 //         />
 
-//         <main className="flex-1 min-w-0 bg-white overflow-auto">
+//         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
 //           <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
 //             {/* Header */}
 //             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
 //               <div>
 //                 <h1 className="text-3xl font-bold text-[#040303]">Income</h1>
-//                 <p className="text-sm text-[#BFC0C0]">
+//                 <p className="text-sm text-[#040303]/60">
 //                   Track and manage your income sources
 //                 </p>
 //               </div>
 
 //               <button
 //                 onClick={() => setOpen(true)}
-//                 className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:opacity-90 transition"
+//                 className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition"
 //               >
 //                 Add Income
 //               </button>
 //             </div>
 
 //             {/* Total Annual Income */}
-//             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-//               <h3 className="font-semibold text-[#040303]">
-//                 Total Annual Income
-//               </h3>
-//               <p className="text-xs text-[#BFC0C0] mt-1">
+//             <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+//               <h3 className="font-bold text-[#040303]">Total Annual Income</h3>
+//               <p className="text-xs text-[#040303]/60 mt-1">
 //                 Estimated yearly income from all sources
 //               </p>
 
-//               <div className="text-4xl font-bold mt-6 text-[#EF8354]">
+//               <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
 //                 ${totalAnnualIncome.toLocaleString()}
 //               </div>
 //             </div>
 
 //             {/* Income Sources */}
-//             <div className="bg-white border border-[#BFC0C0] rounded-lg p-6">
-//               <h3 className="font-semibold text-[#040303]">Income Sources</h3>
-//               <p className="text-xs text-[#BFC0C0] mt-1">
+//             <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+//               <h3 className="font-bold text-[#040303]">Income Sources</h3>
+//               <p className="text-xs text-[#040303]/60 mt-1">
 //                 All your tracked income sources
 //               </p>
 
 //               <div className="mt-5">
 //                 {incomes.length === 0 ? (
-//                   <div className="h-24 rounded-md bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#BFC0C0]">
+//                   <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60">
 //                     No income sources added yet
 //                   </div>
 //                 ) : (
 //                   <div className="overflow-auto">
 //                     <table className="w-full text-sm">
-//                       <thead className="text-left text-[#BFC0C0]">
+//                       <thead className="text-left text-[#040303]/60">
 //                         <tr className="border-b border-[#BFC0C0]/60">
 //                           <th className="py-3">Source</th>
 //                           <th className="py-3">Amount</th>
@@ -194,7 +184,7 @@
 //                             key={it.id}
 //                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
 //                           >
-//                             <td className="py-3 font-medium text-[#040303]">
+//                             <td className="py-3 font-semibold text-[#040303]">
 //                               {it.source}
 //                             </td>
 //                             <td className="py-3 text-[#040303]">
@@ -209,7 +199,7 @@
 //                             <td className="py-3 text-right">
 //                               <button
 //                                 onClick={() => deleteIncome(it.id)}
-//                                 className="mt-2 text-xs px-6 py-3 rounded-md bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
+//                                 className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
 //                               >
 //                                 Delete
 //                               </button>
@@ -232,20 +222,20 @@
 //                 />
 
 //                 <div className="relative min-h-screen flex items-center justify-center p-4">
-//                   <div className="w-full max-w-xl bg-white rounded-lg shadow-xl border border-[#BFC0C0]">
+//                   <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-[#BFC0C0]">
 //                     <div className="flex items-start justify-between px-6 pt-5">
 //                       <div>
-//                         <h3 className="text-lg font-semibold text-[#040303]">
+//                         <h3 className="text-lg font-bold text-[#040303]">
 //                           Add New Income
 //                         </h3>
-//                         <p className="text-sm text-[#BFC0C0] mt-1">
+//                         <p className="text-sm text-[#040303]/60 mt-1">
 //                           Add a new income source to track your earnings
 //                         </p>
 //                       </div>
 
 //                       <button
 //                         onClick={() => setOpen(false)}
-//                         className="text-[#BFC0C0] hover:text-[#040303] px-2"
+//                         className="text-[#040303]/50 hover:text-[#040303] px-2"
 //                         aria-label="Close"
 //                       >
 //                         ✕
@@ -257,21 +247,21 @@
 //                       className="px-6 pb-6 pt-4 space-y-4"
 //                     >
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Income Source
 //                         </label>
 //                         <input
 //                           name="source"
 //                           value={form.source}
 //                           onChange={handleChange}
-//                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                           className="w-full mt-2 border border-[#BFC0C0] rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           placeholder="e.g., Salary, Freelance, Investment"
 //                           required
 //                         />
 //                       </div>
 
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Amount ($)
 //                         </label>
 //                         <input
@@ -280,20 +270,19 @@
 //                           onChange={handleChange}
 //                           type="number"
 //                           step="0.01"
-//                           className="w-full mt-2 border border-[#BFC0C0] rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                           className="w-full mt-2 border border-[#BFC0C0] rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           placeholder="0.00"
 //                           required
 //                         />
 //                       </div>
 
 //                       <div>
-//                         <label className="text-sm font-medium text-[#040303]">
+//                         <label className="text-sm font-semibold text-[#040303]">
 //                           Frequency
 //                         </label>
 
 //                         <div className="relative mt-2">
-//                           {/* Custom arrow – slightly left */}
-//                           <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
+//                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#BFC0C0] pointer-events-none">
 //                             ▼
 //                           </span>
 
@@ -301,9 +290,7 @@
 //                             name="frequency"
 //                             value={form.frequency}
 //                             onChange={handleChange}
-//                             className="appearance-none w-full border border-[#BFC0C0] rounded-md
-//                             pl-2 pr-3 py-2 outline-none
-//                             focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
+//                             className="appearance-none w-full border border-[#BFC0C0] rounded-xl pl-3 pr-10 py-2 outline-none focus:ring-2 focus:ring-[#EF8354]/30 focus:border-[#EF8354]"
 //                           >
 //                             <option value="monthly">Monthly</option>
 //                             <option value="yearly">Yearly</option>
@@ -314,7 +301,7 @@
 
 //                       <button
 //                         type="submit"
-//                         className="w-full bg-[#EF8354] text-white py-2.5 rounded-md font-medium hover:opacity-90 transition"
+//                         className="w-full bg-[#EF8354] text-white py-2.5 rounded-xl font-semibold hover:opacity-90 transition"
 //                       >
 //                         Add Income
 //                       </button>
@@ -325,10 +312,14 @@
 //             ) : null}
 //           </div>
 //         </main>
+
 //         <ChatBotWidget />
 //       </div>
 
-//       <DashboardFooter />
+//       {/* Footer full background */}
+//       <div className="w-full bg-[#ebe4e1]">
+//         <DashboardFooter />
+//       </div>
 //     </div>
 //   );
 // }
@@ -457,38 +448,42 @@ export default function IncomePage() {
         />
 
         <main className="flex-1 min-w-0 bg-gray-50 overflow-auto">
-          <div className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
+          {/* ✅ mobile padding only */}
+          <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {/* Header */}
             <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
               <div>
-                <h1 className="text-3xl font-bold text-[#040303]">Income</h1>
-                <p className="text-sm text-[#040303]/60">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#040303]">
+                  Income
+                </h1>
+                <p className="text-xs sm:text-sm text-[#040303]/60">
                   Track and manage your income sources
                 </p>
               </div>
 
+              {/* ✅ mobile full width button */}
               <button
                 onClick={() => setOpen(true)}
-                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition"
+                className="bg-[#EF8354] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition w-full sm:w-auto"
               >
                 Add Income
               </button>
             </div>
 
             {/* Total Annual Income */}
-            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
               <h3 className="font-bold text-[#040303]">Total Annual Income</h3>
               <p className="text-xs text-[#040303]/60 mt-1">
                 Estimated yearly income from all sources
               </p>
 
-              <div className="text-4xl font-extrabold mt-6 text-[#EF8354]">
+              <div className="text-3xl sm:text-4xl font-extrabold mt-6 text-[#EF8354]">
                 ${totalAnnualIncome.toLocaleString()}
               </div>
             </div>
 
             {/* Income Sources */}
-            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-6">
+            <div className="bg-white border border-[#BFC0C0] rounded-2xl p-4 sm:p-6">
               <h3 className="font-bold text-[#040303]">Income Sources</h3>
               <p className="text-xs text-[#040303]/60 mt-1">
                 All your tracked income sources
@@ -496,19 +491,30 @@ export default function IncomePage() {
 
               <div className="mt-5">
                 {incomes.length === 0 ? (
-                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60">
+                  <div className="h-24 rounded-xl bg-white border border-dashed border-[#BFC0C0] flex items-center justify-center text-sm text-[#040303]/60 px-4 text-center">
                     No income sources added yet
                   </div>
                 ) : (
-                  <div className="overflow-auto">
-                    <table className="w-full text-sm">
+                  /* ✅ MOBILE FIX: gap + scroll */
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[900px]">
                       <thead className="text-left text-[#040303]/60">
                         <tr className="border-b border-[#BFC0C0]/60">
-                          <th className="py-3">Source</th>
-                          <th className="py-3">Amount</th>
-                          <th className="py-3">Frequency</th>
-                          <th className="py-3">Annual</th>
-                          <th className="py-3 text-right">Action</th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Source
+                          </th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Amount
+                          </th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Frequency
+                          </th>
+                          <th className="py-3 whitespace-nowrap pr-6 sm:pr-0">
+                            Annual
+                          </th>
+                          <th className="py-3 text-right whitespace-nowrap pr-0">
+                            Action
+                          </th>
                         </tr>
                       </thead>
 
@@ -518,19 +524,19 @@ export default function IncomePage() {
                             key={it.id}
                             className="border-b border-[#BFC0C0]/40 last:border-b-0"
                           >
-                            <td className="py-3 font-semibold text-[#040303]">
+                            <td className="py-3 font-semibold text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
                               {it.source}
                             </td>
-                            <td className="py-3 text-[#040303]">
+                            <td className="py-3 text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
                               ${Number(it.amount).toLocaleString()}
                             </td>
-                            <td className="py-3 text-[#040303] capitalize">
+                            <td className="py-3 text-[#040303] capitalize whitespace-nowrap pr-6 sm:pr-0">
                               {it.frequency}
                             </td>
-                            <td className="py-3 text-[#040303]">
+                            <td className="py-3 text-[#040303] whitespace-nowrap pr-6 sm:pr-0">
                               ${calcAnnual(it).toLocaleString()}
                             </td>
-                            <td className="py-3 text-right">
+                            <td className="py-3 text-right whitespace-nowrap pr-0">
                               <button
                                 onClick={() => deleteIncome(it.id)}
                                 className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
@@ -555,9 +561,10 @@ export default function IncomePage() {
                   onClick={() => setOpen(false)}
                 />
 
-                <div className="relative min-h-screen flex items-center justify-center p-4">
+                {/* ✅ mobile modal spacing only */}
+                <div className="relative min-h-screen flex items-center justify-center p-3 sm:p-4 overflow-auto">
                   <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-[#BFC0C0]">
-                    <div className="flex items-start justify-between px-6 pt-5">
+                    <div className="flex items-start justify-between px-4 sm:px-6 pt-5">
                       <div>
                         <h3 className="text-lg font-bold text-[#040303]">
                           Add New Income
@@ -578,7 +585,7 @@ export default function IncomePage() {
 
                     <form
                       onSubmit={addIncome}
-                      className="px-6 pb-6 pt-4 space-y-4"
+                      className="px-4 sm:px-6 pb-6 pt-4 space-y-4"
                     >
                       <div>
                         <label className="text-sm font-semibold text-[#040303]">
@@ -650,7 +657,6 @@ export default function IncomePage() {
         <ChatBotWidget />
       </div>
 
-      {/* Footer full background */}
       <div className="w-full bg-[#ebe4e1]">
         <DashboardFooter />
       </div>

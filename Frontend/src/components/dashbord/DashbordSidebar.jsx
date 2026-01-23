@@ -9,6 +9,9 @@
 //   Sparkles,
 //   ChevronLeft,
 //   ChevronRight,
+
+ 
+//   FileBarChart2,
 // } from "lucide-react";
 
 // const navItems = [
@@ -18,6 +21,9 @@
 //   { label: "Liabilities", to: "/liabilities", icon: FileText },
 //   { label: "Credit Cards", to: "/credit-cards", icon: CreditCard },
 //   { label: "Recommendations", to: "/recommendations", icon: Sparkles },
+
+  
+//   { label: "Report & Analysis", to: "/AnalysisPage", icon: FileBarChart2 },
 // ];
 
 // export default function DashbordSidebar({ collapsed, onToggle }) {
@@ -28,7 +34,11 @@
 //     >
 //       {/* Top brand + collapse button */}
 //       <div className="h-14 flex items-center justify-between px-4 border-b border-[#BFC0C0]/40">
-//         <div className={`flex items-center gap-2 ${collapsed ? "justify-center w-full" : ""}`}>
+//         <div
+//           className={`flex items-center gap-2 ${
+//             collapsed ? "justify-center w-full" : ""
+//           }`}
+//         >
 //           {/* <div className="w-8 h-8 rounded-lg bg-[#EF8354] text-white flex items-center justify-center font-bold text-sm">
 //             F
 //           </div>
@@ -82,7 +92,9 @@
 //               title={collapsed ? item.label : undefined}
 //             >
 //               <Icon className={`h-5 w-5 ${collapsed ? "" : ""}`} />
-//               {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+//               {!collapsed && (
+//                 <span className="text-sm font-medium">{item.label}</span>
+//               )}
 //             </NavLink>
 //           );
 //         })}
@@ -102,8 +114,6 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-
- 
   FileBarChart2,
 } from "lucide-react";
 
@@ -114,30 +124,29 @@ const navItems = [
   { label: "Liabilities", to: "/liabilities", icon: FileText },
   { label: "Credit Cards", to: "/credit-cards", icon: CreditCard },
   { label: "Recommendations", to: "/recommendations", icon: Sparkles },
-
-  
   { label: "Report & Analysis", to: "/AnalysisPage", icon: FileBarChart2 },
 ];
 
 export default function DashbordSidebar({ collapsed, onToggle }) {
   return (
     <aside
-      className={`h-screen sticky top-0  bg-[#FFFFFF] border-r border-[#BFC0C0]/50 transition-all duration-200
-      ${collapsed ? "w-[72px]" : "w-[260px]"}`}
+      className={[
+        // keep visible always
+        "h-screen sticky top-0 bg-[#FFFFFF] border-r border-[#BFC0C0]/50 transition-all duration-200",
+        // responsive width (no hiding)
+        collapsed
+          ? "w-[64px] sm:w-[72px]"
+          : "w-[220px] sm:w-[260px]",
+      ].join(" ")}
     >
       {/* Top brand + collapse button */}
-      <div className="h-14 flex items-center justify-between px-4 border-b border-[#BFC0C0]/40">
+      <div className="h-14 flex items-center justify-between px-3 sm:px-4 border-b border-[#BFC0C0]/40">
         <div
           className={`flex items-center gap-2 ${
             collapsed ? "justify-center w-full" : ""
           }`}
         >
-          {/* <div className="w-8 h-8 rounded-lg bg-[#EF8354] text-white flex items-center justify-center font-bold text-sm">
-            F
-          </div>
-          {!collapsed && (
-            <span className="text-base font-semibold text-[#040303]">FinSage</span>
-          )} */}
+          {/* (kept commented) */}
         </div>
 
         <button
@@ -153,7 +162,7 @@ export default function DashbordSidebar({ collapsed, onToggle }) {
 
       {/* Collapsed toggle button (shows when collapsed) */}
       {collapsed && (
-        <div className="px-3 pt-3">
+        <div className="px-2 sm:px-3 pt-3">
           <button
             onClick={onToggle}
             className="w-full p-2 rounded-lg border border-[#BFC0C0]/60 hover:bg-[#EF8354]/10 transition flex items-center justify-center"
@@ -166,7 +175,7 @@ export default function DashbordSidebar({ collapsed, onToggle }) {
       )}
 
       {/* Nav */}
-      <nav className="px-3 py-4 space-y-1">
+      <nav className="px-2 sm:px-3 py-4 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
 
@@ -176,17 +185,19 @@ export default function DashbordSidebar({ collapsed, onToggle }) {
               to={item.to}
               className={({ isActive }) =>
                 [
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 transition",
+                  "flex items-center gap-3 rounded-xl transition",
                   "text-[#040303] hover:bg-[#EF8354]/10",
                   isActive ? "bg-[#EF8354] text-white hover:bg-[#EF8354]" : "",
-                  collapsed ? "justify-center" : "",
+                  collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5",
                 ].join(" ")
               }
               title={collapsed ? item.label : undefined}
             >
-              <Icon className={`h-5 w-5 ${collapsed ? "" : ""}`} />
+              <Icon className="h-5 w-5" />
               {!collapsed && (
-                <span className="text-sm font-medium">{item.label}</span>
+                <span className="text-sm font-medium truncate">
+                  {item.label}
+                </span>
               )}
             </NavLink>
           );
