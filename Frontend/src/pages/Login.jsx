@@ -88,7 +88,7 @@ export default function Login() {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex-1 flex items-center justify-center px-4 py-10 bg-[#ecebe8]">
+      <div className="flex-1 flex items-center justify-center px-4 py-10 bg-white">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex justify-center items-center gap-3 mb-8">
             <div className="w-11 h-11 rounded-2xl bg-[#EF8354] text-white flex items-center justify-center font-bold text-xl">
