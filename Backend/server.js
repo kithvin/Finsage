@@ -11,6 +11,7 @@ import assetRoutes from "./routes/assetRoutes.js";
 import liabilityRoutes from "./routes/liabilityRoutes.js";
 import cardRoutes from "./routes/cardRoutes.js";
 import recommendationRoutes from "./routes/recommendationRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -37,6 +38,8 @@ app.use("/api/assets", assetRoutes);
 app.use("/api/liabilities", liabilityRoutes);
 app.use("/api/cards", cardRoutes);
 app.use("/api/recommendations", recommendationRoutes);
+app.use("/api/feedback", feedbackRoutes);
+
 
 // Global error handler
 app.use((err, req, res, next) => {

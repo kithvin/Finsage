@@ -558,7 +558,7 @@ export default function LiabilitiesPage() {
                             <td className="py-3 text-right">
                               <button
                                 onClick={() => deleteLiability(l.id)}
-                                className="text-xs px-4 py-2 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
+                                className="text-xs px-6 py-3 rounded-xl bg-[#EF8354] text-white hover:opacity-90 transition font-semibold"
                               >
                                 Delete
                               </button>

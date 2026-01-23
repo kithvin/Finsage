@@ -94,10 +94,16 @@
 //                     Name
 //                   </label>
 //                   <input
+//                     type="text"
 //                     name="name"
 //                     value={form.name}
 //                     onChange={handleChange}
 //                     placeholder="Ex: John Doe"
+//                     autoComplete="name"
+//                     inputMode="text"
+//                     enterKeyHint="next"
+//                     required
+//                     maxLength={60}
 //                     className="mt-2 w-full rounded-xl bg-white/10 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#EF8354]/70"
 //                   />
 //                 </div>
@@ -109,10 +115,16 @@
 //                     Job Role
 //                   </label>
 //                   <input
+//                     type="text"
 //                     name="role"
 //                     value={form.role}
 //                     onChange={handleChange}
 //                     placeholder="Ex: Student / Employee / Business"
+//                     autoComplete="organization-title"
+//                     inputMode="text"
+//                     enterKeyHint="next"
+//                     required
+//                     maxLength={80}
 //                     className="mt-2 w-full rounded-xl bg-white/10 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#EF8354]/70"
 //                   />
 //                 </div>
@@ -129,6 +141,10 @@
 //                     onChange={handleChange}
 //                     rows={4}
 //                     placeholder="Ex: I love the dashboard, but I want monthly reports..."
+//                     autoComplete="off"
+//                     enterKeyHint="send"
+//                     required
+//                     maxLength={500}
 //                     className="mt-2 w-full resize-none rounded-xl bg-white/10 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#EF8354]/70"
 //                   />
 //                 </div>
@@ -144,7 +160,7 @@
 //                 {/* Success */}
 //                 {submitted && (
 //                   <div className="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 text-sm text-white/80">
-//                      Thank you! Your feedback was received.
+//                     Thank you! Your feedback was received.
 //                   </div>
 //                 )}
 
@@ -162,25 +178,54 @@
 // }
 
 import React, { useState } from "react";
-import { MessageSquareText, User, Briefcase } from "lucide-react";
+import axios from "axios";
+import { MessageSquareText, User, Briefcase, Loader2 } from "lucide-react";
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // ex: http://localhost:5000
 
 export default function FinSageFeedbackCard() {
   const [form, setForm] = useState({ name: "", role: "", comment: "" });
   const [submitted, setSubmitted] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
     setSubmitted(false);
+    setError("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.name.trim() || !form.role.trim() || !form.comment.trim()) return;
+    setSubmitted(false);
+    setError("");
 
-    console.log("Feedback:", form);
-    setSubmitted(true);
-    setForm({ name: "", role: "", comment: "" });
+    if (!form.name.trim() || !form.role.trim() || !form.comment.trim()) {
+      setError("Please fill all fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await axios.post(`${API_BASE}/api/feedback`, {
+        name: form.name.trim(),
+        role: form.role.trim(),
+        comment: form.comment.trim(),
+      });
+
+      setSubmitted(true);
+      setForm({ name: "", role: "", comment: "" });
+    } catch (err) {
+      setError(
+        err?.response?.data?.message ||
+          "Failed to send feedback. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -312,15 +357,24 @@ export default function FinSageFeedbackCard() {
                   />
                 </div>
 
-                {/* Button */}
+                {/* Button (style same) */}
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-[#EF8354] py-4 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition"
+                  disabled={loading}
+                  className="w-full rounded-xl bg-[#EF8354] py-4 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Send Feedback
+                  {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {loading ? "Sending..." : "Send Feedback"}
                 </button>
 
-                {/* Success */}
+                {/* Error (new, style consistent) */}
+                {error && (
+                  <div className="rounded-2xl bg-red-500/10 border border-red-500/30 px-4 py-3 text-sm text-white/90">
+                    {error}
+                  </div>
+                )}
+
+                {/* Success (same style) */}
                 {submitted && (
                   <div className="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 text-sm text-white/80">
                     Thank you! Your feedback was received.
@@ -339,3 +393,4 @@ export default function FinSageFeedbackCard() {
     </section>
   );
 }
+
