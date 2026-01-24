@@ -56,7 +56,7 @@ FinSage integrates AI capabilities to provide intelligent financial guidance thr
 • AI Chatbot responses based on user financial data
 • Financial recommendation engine for prioritized improvement actions
 
-The system currently uses Google Generative AI (@google/generative-ai) and is architected to be easily extended or migrated to AWS Bedrock for scalable, cloud-based AI deployment.
+The system currently uses Google Generative AI (@google/generative-ai) and is architected to be easily extended or migrated to AWS Bedrock for scalable, cloud based AI deployment.
 
 =============================================================================================================================
 
